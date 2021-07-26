@@ -10,7 +10,7 @@ const login = (props) => {
     const [errorsignin, setErrorSignin] = useState([])
 
     let handleSignin = async () => {
-        const user = await fetch('http://192.168.1.95:3000/login', {
+        const user = await fetch('http://192.168.1.27:3000/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: `email=${emailin}&password=${passwordin}`
@@ -39,7 +39,7 @@ const login = (props) => {
                     <Input onChangeText={(value) => setEmailIn(value)} containerStyle={styles.input} type="text" name='email' placeholder="Email"/>
                     <Input onChangeText={(value) => setPasswordIn(value)} containerStyle={styles.input} type="text" name='password' placeholder="Password" secureTextEntry={true}/>
                     {errorsin}
-                    <Button title="connexion"color='rgba(44, 110, 73, 100)'onPress={() => handleSignin() }/>   
+                    <Button title="connexion" color='rgba(44, 110, 73, 100)'onPress={() => handleSignin() }/>   
                     <Text>Vous n'avez pas de compte,  <Text style={{color:'#2c6e49'}}onPress={() =>props.navigation.navigate('signup')}>Créer un compte</Text></Text>
                 </View>
             </ScrollView>
