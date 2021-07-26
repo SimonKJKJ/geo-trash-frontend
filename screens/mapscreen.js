@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, TouchableHighlight } from 'react-native';
 import { Overlay } from 'react-native-elements';
 
 const mapscreen = (props) => {
@@ -10,12 +10,13 @@ const mapscreen = (props) => {
     return (
         <View style={styles.container}>
         <Button title="Open Overlay" onPress={toggleOverlay} />
-  
+
         <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
             <Text>LA PETITE SIRENE</Text>
           <Image source={require('./mermaid-whatsapp.png')}/>
-           <Text> DE WHISH</Text>
           <Image source={require('./mermaid-whatsapp.png')} />
+           <Text> DE WHISH</Text>
+          
         </Overlay>
       </View>
     );

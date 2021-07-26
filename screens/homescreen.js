@@ -18,7 +18,7 @@ useEffect(()=> {
                     <Text style={styles.titles}>Quoi de prévu aujourd'hui ?</Text>
                     <Text style={styles.para}>Que dirais tu de tester tes connaissances sur l'environnement ? </Text>
                     <View style={styles.container2} >
-                    <Emoji name="earth_americas" style={{fontSize: 45,marginBottom: 25}}/>
+                    <Emoji onPress={()=> console.log("click detecté")} name="earth_americas" style={{fontSize: 45,marginBottom: 25}}/>
                     <Button   buttonStyle={styles.button} containerStyle={{width: "80%", marginTop:10, marginBottom: 100}} title="Quizz" onPress={()=> console.log("click ok")}/>
                     </View>
                     <Text style={styles.titles2}>On te parle un peu de nous ?</Text>
