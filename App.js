@@ -9,23 +9,53 @@ import parcourchoix from './screens/parcourchoix';
 import trajetparcour from './screens/trajetparcour';
 import mapscreen from './screens/mapscreen';
 import homescreen from './screens/homescreen';
-import signup from './screens/signup'
+import signup from './screens/signup';
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
+import name from './screens/reducers/user';
+import { FontAwesome } from '@expo/vector-icons'; 
+
+
+const store = createStore(combineReducers({name}));
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const BottomNavigator = () => {
   return(
-    <Tab.Navigator>
-     <Tab.Screen name="Home" component={homescreen}/>
-     <Tab.Screen name="map" component={mapscreen}/>
-     <Tab.Screen name="parcours" component={parcourchoix}/>
-    </Tab.Navigator>
+    
+      <Tab.Navigator 
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color }) => {
+          let iconName;
+          if (route.name === 'Home') {
+            iconName = 'home';
+          } else if (route.name === 'map') {
+            iconName = 'map-marker';
+          } else if(route.name==='parcours') {
+            iconName = 'flag-checkered'
+          }
+          return <FontAwesome  name={iconName} size={25} color={color} />;
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: '#D68C45',
+        inactiveTintColor: '#606060',
+        activeBackgroundColor: '#2c6e49',
+        inactiveBackgroundColor: '#fff',
+      }}
+      >
+        <Tab.Screen name="Home" component={homescreen}/>
+        <Tab.Screen name="map" component={mapscreen}/>
+        <Tab.Screen name="parcours" component={parcourchoix}/>
+      </Tab.Navigator>
+    
   )
 }
 
 export default function App() {
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="login" component={login} />
@@ -33,6 +63,7 @@ export default function App() {
         <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
       </Stack.Navigator>
   </NavigationContainer>
+  </Provider>
   );
 }
 

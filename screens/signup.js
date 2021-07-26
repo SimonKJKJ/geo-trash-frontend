@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { StyleSheet,Text, View, Button} from 'react-native';
 import {Input} from 'react-native-elements';
 
+
 function signup(props) {
     const[firstname, setFirstname] = useState('');
     const[lastname, setLastname] = useState('');
@@ -77,5 +78,6 @@ const styles = StyleSheet.create({
 
 
 })
+
 
 export default signup;
