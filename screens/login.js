@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet,Text, View, Button,Image,ScrollView, SafeAreaView } from 'react-native';
-import {Input} from 'react-native-elements';
+import {StyleSheet,Text, View, Image,ScrollView, SafeAreaView } from 'react-native';
+import {Input,Button,} from 'react-native-elements';
+import { RotationGestureHandler } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
 
 
 const login = (props) => {
@@ -16,16 +18,19 @@ const login = (props) => {
             body: `email=${emailin}&password=${passwordin}`
         })
         const userin = await user.json()
-        console.log("user in ////",userin.result)
+        console.log("user in ////",userin)
         console.log("userexist",userexist)
 
         if(userin.result === false){
             setErrorSignin(userin.error)
-            return (props.navigation.navigate('login'))  
+            return (props.navigation.navigate('login')) 
         } else {
+            props.sendfirstname(userin) 
+            console.log("userinfn///",props.sendfirstname)
             setUserExist(true);
-            return (props.navigation.navigate('BottomNavigator', {screen: 'home'}))   
+            return (props.navigation.navigate('BottomNavigator', {screen: 'home'}));
         }   
+        
     }   
     let errorsin = errorsignin.map((error, i) => {
          return <Text key={i}>{error}</Text>
@@ -39,8 +44,8 @@ const login = (props) => {
                     <Input onChangeText={(value) => setEmailIn(value)} containerStyle={styles.input} type="text" name='email' placeholder="Email"/>
                     <Input onChangeText={(value) => setPasswordIn(value)} containerStyle={styles.input} type="text" name='password' placeholder="Password" secureTextEntry={true}/>
                     {errorsin}
-                    <Button title="connexion" color='rgba(44, 110, 73, 100)'onPress={() => handleSignin() }/>   
-                    <Text>Vous n'avez pas de compte,  <Text style={{color:'#2c6e49'}}onPress={() =>props.navigation.navigate('signup')}>Créer un compte</Text></Text>
+                    <Button  containerStyle={{width: "80%", marginTop:10, marginBottom: 100}} buttonStyle={styles.button}  onPress={() => handleSignin() } title='Connexion'/>  
+                    <Text>Vous n'avez pas de compte,  <Text style={styles.text}onPress={() =>props.navigation.navigate('signup')}>Créer un compte</Text></Text>
                 </View>
             </ScrollView>
        </SafeAreaView> 
@@ -48,14 +53,18 @@ const login = (props) => {
 };
 
 const styles = StyleSheet.create({
+    text:{
+        color:'#2c6e49',
+        fontWeight: 'bold',
+    },
+    button:{
+        borderRadius: 15,
+        backgroundColor:'#2c6e49',
+    },
     image:{
         width: '100%',
         resizeMode: 'contain',
-    },
-    text:{
-        marginTop: 1,
-        alignItems: 'flex-end',
-        justifyContent: 'flex-end'
+        marginBottom: -65,
     },
     input:{
         backgroundColor:'rgba(44, 110, 73, 0.4)',
@@ -72,5 +81,14 @@ const styles = StyleSheet.create({
 
 
 })
-
-export default login;
+function mapDispatchToProps(dispatch) {
+    return {
+        sendfirstname: function(firstname) {
+            dispatch({type:'sendfirstname', name : firstname})
+        }
+    }
+}
+export default connect(
+    null,
+    mapDispatchToProps
+) (login);
