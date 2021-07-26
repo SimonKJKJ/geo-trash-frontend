@@ -23,7 +23,7 @@ let handleSignup = async () => {
         setErrorSignup(userok.error)
     } else {
         setUserExistup(true)
-        return(props.navigation.navigate('BottomNavigator', {screen: 'home'}))
+        return(props.navigation.navigate('login'))
     }  
     
 }

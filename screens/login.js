@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet,Text, View, Button,Image} from 'react-native';
+import {StyleSheet,Text, View, Button,Image,ScrollView, SafeAreaView } from 'react-native';
 import {Input} from 'react-native-elements';
 
 
@@ -32,14 +32,18 @@ const login = (props) => {
     })
     
     return (
-        <View style={styles.container}>
-            <Image style={styles.image} source={require('./Geotrash.png')}/>
-            <Input onChangeText={(value) => setEmailIn(value)} containerStyle={styles.input} type="text" name='email' placeholder="Email"/>
-            <Input onChangeText={(value) => setPasswordIn(value)} containerStyle={styles.input} type="text" name='password' placeholder="Password" secureTextEntry={true}/>
-            {errorsin}
-            <Button title="connexion"color='rgba(44, 110, 73, 100)'onPress={() => handleSignin() }/>   
-            <Text>Vous n'avez pas de compte,  <Text style={{color:'#2c6e49'}}onPress={() =>props.navigation.navigate('signup')}>Créer un compte</Text></Text>
-        </View>    
+        <SafeAreaView style={styles.container}>
+            <ScrollView>
+                <View style={styles.container}>
+                    <Image style={styles.image} source={require('./Geotrash.png')}/>
+                    <Input onChangeText={(value) => setEmailIn(value)} containerStyle={styles.input} type="text" name='email' placeholder="Email"/>
+                    <Input onChangeText={(value) => setPasswordIn(value)} containerStyle={styles.input} type="text" name='password' placeholder="Password" secureTextEntry={true}/>
+                    {errorsin}
+                    <Button title="connexion"color='rgba(44, 110, 73, 100)'onPress={() => handleSignin() }/>   
+                    <Text>Vous n'avez pas de compte,  <Text style={{color:'#2c6e49'}}onPress={() =>props.navigation.navigate('signup')}>Créer un compte</Text></Text>
+                </View>
+            </ScrollView>
+       </SafeAreaView> 
     );     
 };
 
