@@ -30,7 +30,6 @@ const login = (props) => {
             setUserExist(true);
             return (props.navigation.navigate('BottomNavigator', {screen: 'home'}));
         }   
-        
     }   
     let errorsin = errorsignin.map((error, i) => {
          return <Text key={i}>{error}</Text>
