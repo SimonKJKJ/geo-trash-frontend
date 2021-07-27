@@ -22,13 +22,21 @@ const mapscreen = (props) => {
   const [trashlist, setTrashList] = useState([])
   const [pincolor, setPinColor] = useState('')
   const [visibleInfo,setVisibleInfo] = useState(false);
-
-
-
+////////////////////////////////////////////////////////////////////////////initialisation marqueur lancement appli ///////////////////////////////////////////////////////////
+  const [markers, setMarkers] = useState([]);
+  useEffect(()=> {
+    async function marker() {
+      const mark = await fetch('http://192.168.1.95:3000/calltrash')
+      const markjson = await mark.json();
+      console.log("markers", markjson)
+      setMarkers(markjson.longitude)
+    } 
+    marker();
+  }, [])
+////////////////////////////////////////////////////////////////////////calcul distance///////////////////////////////////////////////////////////////
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
-
 function getDistance(lat1, lon1, lat2, lon2) {
   var R = 6371;
   var dLat = deg2rad(lat2-lat1);
@@ -42,10 +50,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
   var d = Math.round((R * c)*1000)   //distance en mètre
   return d;
 }
-
   useEffect(() => {
-
-
     async function askPermissions() {
       let { status } = await Permissions.askAsync(Permissions.LOCATION);
       if (status === 'granted') {
@@ -58,7 +63,6 @@ function getDistance(lat1, lon1, lat2, lon2) {
       }
     }
     askPermissions();
-    
   }, []);
 
 let trash = (onPress) => {
@@ -122,12 +126,11 @@ let handleaddtrash = async () => {
               onPress={toggleInfo}
               />
   </MapView>
-        {/* <Button title='test' onPress={()=>trashmap()}/> */}
     <View style={{flexDirection:'row', justifyContent:'space-around'}}>
       <FontAwesome name="plus-square" size={30} color="#2c6e49" onPress={toggleOverlay} />
       <FontAwesome name="filter" size={30} color="#2c6e49" onPress={changestateover}/>
     </View>  
-{/* /////////////////////////////////////////////////////////////////////////////////////filtres///////////////////////////////////////////////////////////////////////        */}
+{/* /////////////////////////////////////////////////////////////////////////////////////filtres///////////////////////////////////////////////////////////////////////*/}
   <Overlay overlayStyle={styles.overlay} isVisible={overfilter} onBackdropPress={changestateover}>
     <Text style={{fontSize: 24}}>Que cherches tu ?</Text>
     <TouchableOpacity onPress={()=>console.log("click detect jaune")}>
@@ -145,27 +148,27 @@ let handleaddtrash = async () => {
     <Button  buttonStyle={styles.btnover} title='choisir'/>
   </Overlay>
   {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-  <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+  <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay}>
       <Text style={styles.text}>Veux tu ajouter un nouveau bac ?</Text>
-    <View style={styles.bloc}>
-        <TouchableHighlight onPress={() => trashmap('#ff0')}> 
+    
+        <TouchableOpacity onPress={() => trashmap('#ff0')}> 
           <Image source={require('./pin-jaune.png')}/>
-        </TouchableHighlight>
+        </TouchableOpacity>
         <Text>Papier, plastique, carton</Text>
-    </View>
-    <View style={styles.bloc}>
-        <TouchableHighlight onPress={() => trashmap('#d68c45')}>
+    
+    
+        <TouchableOpacity onPress={() => trashmap('#d68c45')}>
           <Image source={require('./pin-noir.png')}/>
-        </TouchableHighlight>
-        <Text>Tout venant</Text>
-    </View>
-    <View style={styles.bloc}>
-        <TouchableHighlight onPress={() => trashmap('#00ff00')}>
+        </TouchableOpacity>
+        <Text style={styles.textover}>Tout venant</Text>
+    
+    
+        <TouchableOpacity onPress={() => trashmap('#00ff00')}>
           <Image source={require('./pin-vert.png')}/>
-        </TouchableHighlight>
+        </TouchableOpacity>
         <Text>Verre</Text>
-    </View> 
-    <Button title="Valider"/>
+    
+    <Button buttonStyle={styles.btnover} title="Valider"/>
   </Overlay>
 
   <Overlay style={styles.overl} isVisible={visibleInfo} onBackdropPress={toggleInfo}>
