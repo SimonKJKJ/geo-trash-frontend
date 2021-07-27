@@ -23,13 +23,11 @@ const mapscreen = (props) => {
   const [pincolor, setPinColor] = useState('')
   const [visibleInfo,setVisibleInfo] = useState(false);
 
-
-
-function deg2rad(deg) {
+function deg2rad(deg) {  //fonction permettant de passer de degré en radian
   return deg * (Math.PI/180)
 }
 
-function getDistance(lat1, lon1, lat2, lon2) {
+function getDistance(lat1, lon1, lat2, lon2) { // Formule de Haversine pour le calcul de la distance entre 2 points
   var R = 6371;
   var dLat = deg2rad(lat2-lat1);
   var dLon = deg2rad(lon2-lon1); 
@@ -38,14 +36,12 @@ function getDistance(lat1, lon1, lat2, lon2) {
     Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
     Math.sin(dLon/2) * Math.sin(dLon/2)
     ; 
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));  //Math.atan2 prend les coordonnées en abscisse et en ordonnée du point
   var d = Math.round((R * c)*1000)   //distance en mètre
   return d;
 }
 
   useEffect(() => {
-
-
     async function askPermissions() {
       let { status } = await Permissions.askAsync(Permissions.LOCATION);
       if (status === 'granted') {
@@ -81,7 +77,7 @@ let trashmark = trashlist.map((trash, i) => {
 })
 
 let handleaddtrash = async () => {
-  const trashin = await fetch('http://192.168.1.95:3000/addtrash', {
+  const trashin = await fetch('http://192.168.1.27:3000/addtrash', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: `latitude=${loctrash.latitude}&longitude=${loctrash.longitude}&color=${pincolor}`
