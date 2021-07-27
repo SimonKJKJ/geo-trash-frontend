@@ -136,7 +136,7 @@ const mapscreen = (props) => {
               {/* ///////ajouter ici le markeur de la benne/////// */}
             </MapView>
             <Button style={styles.button}
-              color='#2c6e49' 
+               
               onPress={() => setVisibleInfo(false)}
               title="Retour"
             />
@@ -181,7 +181,8 @@ const styles = StyleSheet.create({
     button:{
       marginBottom : 10,
       borderRadius: 15,
-      width :'50%'
+      width :'50%',
+      color='#2c6e49'
     }
 
 })
