@@ -21,6 +21,27 @@ const mapscreen = (props) => {
   const [loctrash, setLocTrash] = useState('');
   const [trashlist, setTrashList] = useState([])
   const [pincolor, setPinColor] = useState('')
+  const [visibleInfo,setVisibleInfo] = useState(false);
+
+
+
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}
+
+function getDistance(lat1, lon1, lat2, lon2) {
+  var R = 6371;
+  var dLat = deg2rad(lat2-lat1);
+  var dLon = deg2rad(lon2-lon1); 
+  var a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ; 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = Math.round((R * c)*1000)   //distance en mètre
+  return d;
+}
 
   useEffect(() => {
 
@@ -76,6 +97,9 @@ let handleaddtrash = async () => {
     const changestateover =()=> {
       setOverfilter(!overfilter)
     }
+    const toggleInfo =() => {
+      setVisibleInfo(!visible)
+    }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
 <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
@@ -93,6 +117,10 @@ let handleaddtrash = async () => {
       title="Je suis ici"
       description="Ma position"
       coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}/>
+      <Marker pinColor="green"
+              coordinate={{latitude: 43.29, longitude: 5.37}}
+              onPress={toggleInfo}
+              />
   </MapView>
         {/* <Button title='test' onPress={()=>trashmap()}/> */}
     <View style={{flexDirection:'row', justifyContent:'space-around'}}>
@@ -139,9 +167,38 @@ let handleaddtrash = async () => {
     </View> 
     <Button title="Valider"/>
   </Overlay>
+
+  <Overlay style={styles.overl} isVisible={visibleInfo} onBackdropPress={toggleInfo}>
+            <Text style={styles.text}>
+              Courage ! Tu es à seulement {getDistance(currentLatitude, currentLongitude, 43.325783, 5.366766)} mètres !
+            </Text>
+            <MapView
+              style={styles.overl}
+              initialRegion={{
+                latitude: currentLatitude,
+                longitude: currentLongitude,
+                latitudeDelta: 0.0092,
+                longitudeDelta: 0.0092,
+              }}
+              >  
+              <Marker key={"currentPos"}
+                pinColor="red"
+                title="Je suis ici"
+                description="Ma position"
+                coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
+                onPress={toggleOverlay}
+              />
+              {/* ///////ajouter ici le markeur de la benne/////// */}
+              
+            </MapView>
+            <Button style={styles.button}
+               
+              onPress={() => setVisibleInfo(false)}
+              title="Retour"
+            />
+        </Overlay>
 </View>
-    );
-};
+)};
 const styles = StyleSheet.create({
     btnover:{
       backgroundColor: '#2c6e49',
@@ -172,20 +229,36 @@ const styles = StyleSheet.create({
     },
     text:{
       fontWeight:'bold',
-      fontSize:20
+      fontSize:20,
+      margin:30,
+      alignItems :'center'
     },
     bloc:{
       display:'flex',
       flexDirection:'row',
-      alignItems:'center'
+      alignItems:'center',
+      justifyContent:'center'
     },
     image:{
       resizeMode:'contain',
       flex:1,
       width :100
+    },
+    overl:{
+      display:'flex',
+      flex :1,
+      width : 300,
+      margin:10,
+      alignItems:'center',
+      justifyContent:'center'
+    },
+    button:{
+      marginBottom : 10,
+      borderRadius: 15,
+      width:'50%',
+      color:'#2c6e49'
     }
 
 })
-
 
 export default mapscreen;
