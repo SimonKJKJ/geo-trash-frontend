@@ -121,40 +121,19 @@ let handleaddtrash = async () => {
 ////////////////// 3- filtre par couleur ////////////////////////////////////////////
 ////////////////// 4- push color copie //////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////A REVOIR/////////////////////////////////////////////
-// const getMarkerFromColor = (colormark) => {
-//   console.log("colormark", colormark)
-//   console.log("markers//", markers)
-//   let copie = [];
-//   markers.map((mark, i)=> {
-//     if(mark.color === colormark) {
-//       console.log("ca merde !")
-//       const xx = [... copie, mark.color]
-//       console.log("mark////", xx)
-//     }
-//   })
-//   setMarkers(copie)
-// }
-// let copie = [...markers]
-//  console.log("copiei color/", copie)
-// for(let i=0; i<markers.length; i++){
-//   copie.push(markers[i].color)
-//   console.log("colormarkcopie", copie[i].color)
-//  }
-// if(copie[i].color =="#ff0") {
-//    console.log("jaune")
-//    return <Marker key={i} onPress={toggleInfo} pinColor= "#ff0" coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>
-//  } else if (copie[i].color == "#d68c45") {
-//   return <Marker key={i} onPress={toggleInfo} pinColor= "#d68c45" coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>
-//  } else if (copie[i].color == "#00ff00"){
-//   return <Marker key={i} onPress={toggleInfo} pinColor= "#00ff00" coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>
-//  } else {
-//   return <Marker key={i} onPress={toggleInfo} pinColor= {mark.color} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>
-//  }
+const getMarkerFromColor = (colormark) => {
+  console.log("colormark", colormark)
+  console.log("markers//", markers)
+  let copie = [];
+  markers.map((mark, i)=> {
+    if(mark.color === colormark) {
+      const xx = [... copie, mark.color]
+      console.log("mark////", xx)
+    }
+  })
+  setMarkers(copie)
+}
 ////////////////////////////////////////////////////////////////////////////////////.map pour marqueurs lancement application///////////////////////////////////////////// 
-// let trashstart = markers.map((mark,i) => {   
-//   console.log("mark////", mark)
-// return <Marker key={i} onPress={toggleInfo} pinColor= {mark.color} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>
-// })
 /////////////////////////////////////////////////////////////////////////INTEGRATION MAP//////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////Fonction pour OVERLAY DISTANCE trash////////////////////////////////////////////////////////////
     let handleClicTrash = (markerLat, markerLong, colorpin) =>{

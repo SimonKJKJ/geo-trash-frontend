@@ -31,7 +31,7 @@ const parcourchoix = (props) => {
               <Button  
               containerStyle={{width: "80%", marginTop:10, marginBottom: 100}} 
               buttonStyle={styles.button} 
-              onPress={() =>props.navigation.navigate('trajetparcour')}
+              onPress={() =>props.navigation.navigate('trajet')}
               title='Démarrer'
               /> 
           </Card>
@@ -46,7 +46,7 @@ const parcourchoix = (props) => {
               <Button  
               containerStyle={{width: "80%", marginTop:10, marginBottom: 100}} 
               buttonStyle={styles.button} 
-              onPress={() =>props.navigation.navigate('trajetparcour')}
+              onPress={() =>props.navigation.navigate('trajet')}
               title='Démarrer'
               /> 
           </Card>
