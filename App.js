@@ -63,6 +63,7 @@ export default function App() {
         <Stack.Screen name="login" component={login} />
         <Stack.Screen name="signup" component={signup} />
         <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
+        <Stack.Screen name="trajet" component={trajetparcour}/>
       </Stack.Navigator>
   </NavigationContainer>
   </Provider>
