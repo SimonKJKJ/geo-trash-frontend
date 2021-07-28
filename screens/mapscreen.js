@@ -24,22 +24,24 @@ const mapscreen = (props) => {
   const [pincolor, setPinColor] = useState('')
   const [visibleInfo,setVisibleInfo] = useState(false);
 
-function deg2rad(deg) {  //fonction permettant de passer de degré en radian
-  return deg * (Math.PI/180)
-}
-
+  const [latitudeClic,setLatitudeClic] = useState(0);
+  const [longitudeClic,setLongitudeClic] = useState(0);
+  const [distance, setDistance] = useState(0);
+  const [colorPinOverlayDistance,setColorPinOverlayDistance] = useState("");
+  const [coordOverlayDistance,setCoordOverlayDistance] = useState({});
  
 ////////////////////////////////////////////////////////////////////////////initialisation marqueur lancement appli ///////////////////////////////////////////////////////////
   const [markers, setMarkers] = useState([]);
   useEffect(()=> {
     async function marker() {
-      const mark = await fetch('http://192.168.1.95:3000/calltrash')
+      const mark = await fetch('http://192.168.1.27:3000/calltrash')
       const markjson = await mark.json();
       console.log("markers", markjson)
-      setMarkers(markjson.longitude)
+      setMarkers(markjson.recuptrash)
     } 
     marker();
-  }, [])
+  }, [distance,colorPinOverlayDistance,coordOverlayDistance])
+  
 ////////////////////////////////////////////////////////////////////////calcul distance///////////////////////////////////////////////////////////////
 function deg2rad(deg) { 
   return deg * (Math.PI/180)
@@ -101,6 +103,8 @@ let handleaddtrash = async () => {
   const trash = await trashin.json();
   console.log("trashjson////", trash)
 }
+
+
 ////////////////////////////////////////////////////////commandes overlays////////////////////////////////////////////////////////////////////////////    
     const toggleOverlay = () => {
         setVisible(!visible);
@@ -112,6 +116,27 @@ let handleaddtrash = async () => {
     const toggleInfo =() => {
       setVisibleInfo(!visible)
     }
+///////////////////////////////////////////////////Fonction pour OVERLAY DISTANCE trash////////////////////////////////////////////////////////////
+    let handleClicTrash = (markerLat, markerLong, colorpin) =>{
+      setVisibleInfo(!visible)
+      setLatitudeClic(markerLat)
+      setLongitudeClic(markerLong)
+      setColorPinOverlayDistance(colorpin)
+      setCoordOverlayDistance({latitude: latitudeClic, longitude: longitudeClic})
+      console.log("MARKER LAT", markerLat)
+      console.log("MARKER LONG", markerLong)
+      console.log("COLORPIN", colorpin)
+      console.log("COLORPIN OVERLAY DISTANCE", colorPinOverlayDistance)
+      console.log("LATITUDE CLIC", latitudeClic)
+      console.log("LONGITUDE CLIC", longitudeClic)
+      setDistance(getDistance(currentLatitude, currentLongitude,latitudeClic,longitudeClic))
+      console.log("DISTANCE", distance)
+      
+    }
+
+    let trashstart = markers.map((mark,i) => {   
+      return <Marker key={i} pinColor= {mark.color} onPress={()=>handleClicTrash(mark.latitude,mark.longitude,mark.color)} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>   
+    })
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
 <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
@@ -124,20 +149,24 @@ let handleaddtrash = async () => {
       longitudeDelta: 0.0421,
     }}>  
     {trashmark}
+    {trashstart}
     <Marker key={"currentPos"}
       pinColor="red"
       title="Je suis ici"
       description="Ma position"
       coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}/>
+      {/* ///////////////////////////////////////////////////////Marqueur test ////////////////////////////////////////////////////////////////// */}
       <Marker pinColor="green"
               coordinate={{latitude: 43.29, longitude: 5.37}}
               onPress={toggleInfo}
               />
+      {/* ///////////////////////////////////////////////////////Fin Marqueur test/////////////////////////////////////////////////////////////////////////// */}
   </MapView>
     <View style={{flexDirection:'row', justifyContent:'space-around'}}>
       <FontAwesome name="plus-square" size={30} color="#2c6e49" onPress={toggleOverlay} />
       <FontAwesome name="filter" size={30} color="#2c6e49" onPress={changestateover}/>
     </View>  
+
 {/* /////////////////////////////////////////////////////////////////////////////////////filtres///////////////////////////////////////////////////////////////////////*/}
   <Overlay overlayStyle={styles.overlay} isVisible={overfilter} onBackdropPress={changestateover}>
     <Text style={{fontSize: 24}}>Que cherches tu ?</Text>
@@ -155,6 +184,7 @@ let handleaddtrash = async () => {
     <Text style={styles.textover}>verre</Text>
     <Button  buttonStyle={styles.btnover} title='choisir'/>
   </Overlay>
+
   {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
   <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay}>
       <Text style={styles.text}>Veux tu ajouter un nouveau bac ?</Text>
@@ -181,7 +211,7 @@ let handleaddtrash = async () => {
 
   <Overlay style={styles.overl} isVisible={visibleInfo} onBackdropPress={toggleInfo}>
             <Text style={styles.text}>
-              Courage ! Tu es à seulement {getDistance(currentLatitude, currentLongitude, 43.325783, 5.366766)} mètres !
+              Courage ! {"\n"} Tu es à {distance} mètres {"\n"} à vol d'oiseau !
             </Text>
             <MapView
               style={styles.overl}
@@ -199,10 +229,14 @@ let handleaddtrash = async () => {
                 coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
                 onPress={toggleOverlay}
               />
-              {/* ///////ajouter ici le markeur de la benne/////// */}
+              <Marker pinColor={colorPinOverlayDistance}
+              coordinate={coordOverlayDistance}
+              onPress={toggleInfo}
+              />
               
             </MapView>
-            <Button style={styles.button}
+            <Button containerStyle={{width: "80%", marginTop:10, marginBottom: 100}} 
+              buttonStyle={styles.button}
                
               onPress={() => setVisibleInfo(false)}
               title="Retour"
@@ -242,7 +276,6 @@ const styles = StyleSheet.create({
       fontWeight:'bold',
       fontSize:20,
       margin:30,
-      alignItems :'center'
     },
     bloc:{
       display:'flex',
@@ -264,11 +297,9 @@ const styles = StyleSheet.create({
       justifyContent:'center'
     },
     button:{
-      marginBottom : 10,
       borderRadius: 15,
-      width:'50%',
-      color:'#2c6e49'
-    }
+      backgroundColor:'#2c6e49',
+  }
 
 })
 
