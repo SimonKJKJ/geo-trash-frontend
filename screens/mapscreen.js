@@ -1,39 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View , Image,TouchableHighlight, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View , Image, TouchableOpacity } from 'react-native';
 import { Overlay, Button} from 'react-native-elements';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { FontAwesome } from '@expo/vector-icons'; 
 const mapscreen = (props) => {
-/////////////////////////////////////////////////////////////////////pin couleur + au clic///////////////////////////////////////////////////////  
+/////////////////////////////////////////////////////////////////////////////////27 juillet 2021 20h52///////////////////////////////////////////////////  
+////////////////////////////////////////////////////////////////////////////////pin couleur + au clic///////////////////////////////////////////////////  
   const [pinYellow, setPinYellow] = useState(0);
   const [pinBlack, setPinBlack] = useState(0);
   const [pinGreen, setPinGreen] = useState(0);
-///////////////////////////////////////////////////////////////////coordonnées users////////////////////////////////////////////////////////////  
+//////////////////////////////////////////////////////////////////////////////////coordonnées users/////////////////////////////////////////////////////  
   const [currentLatitude, setCurrentLatitude] = useState(0);
   const [currentLongitude, setCurrentLongitude] = useState(0);
-///////////////////////////////////////////////////////////////////////////overlays states///////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////overlays states////////////////////////////////////////////////////////
   const [visible, setVisible] = useState(false);
   const [overfilter, setOverfilter] = useState(false);
-//////////////////////////////////////////////////////////////////////////ajout poubelle au clic//////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////ajout poubelle au clic/////////////////////////////////////////////////////
   const [addtrash, setAddTrash] = useState(false);
   const [loctrash, setLocTrash] = useState('');
   const [trashlist, setTrashList] = useState([])
   const [pincolor, setPinColor] = useState('')
   const [visibleInfo,setVisibleInfo] = useState(false);
-////////////////////////////////////////////////////////////////////////////initialisation marqueur lancement appli ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////initialisation marqueur lancement appli /////////////////////////////////////////
   const [markers, setMarkers] = useState([]);
+
   useEffect(()=> {
     async function marker() {
       const mark = await fetch('http://192.168.1.95:3000/calltrash')
+      console.log("plein le cul---", mark)
       const markjson = await mark.json();
-      console.log("markers", markjson)
-      setMarkers(markjson.longitude)
+      console.log("markjsion--", markjson)
+      console.log("markers4//", markjson.recuptrash[0].latitude)
+      console.log("markers4//", markjson.recuptrash[1].latitude)
+      console.log("markers4//", markjson.recuptrash[0].longitude)
+      console.log("markers4//", markjson.recuptrash[1].longitude)
+      console.log("markers4//", markjson.recuptrash[0].color)
+      console.log("markers4//", markjson.recuptrash[1].color)
+      setMarkers(markjson.recuptrash)
     } 
     marker();
   }, [])
-////////////////////////////////////////////////////////////////////////calcul distance///////////////////////////////////////////////////////////////
+
+  let trashstart = markers.map((mark,i) => {
+  return <Marker key={i} pinColor= {mark.color} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>
+  })
+////////////////////////////////////////////////////////////////////////calcul distance////////////////////////////////////////////////////////////////
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
@@ -64,7 +77,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
     }
     askPermissions();
   }, []);
-
+////////////////////////////////////////////////////////////////////////////function add trash click////////////////////////////////////////////////////////////////////
 let trash = (onPress) => {
   setAddTrash(true);
   setLocTrash({latitude : onPress.nativeEvent.coordinate.latitude, longitude: onPress.nativeEvent.coordinate.longitude})
@@ -83,7 +96,7 @@ let trashmap = (colorMarker) => {
 let trashmark = trashlist.map((trash, i) => {
   return <Marker key={i} pinColor= {pincolor} coordinate={{latitude: trash.latitude, longitude: trash.longitude}}/>
 })
-
+///////////////////////////////////////////////////////////////////////////////////////////////requête controlleur/////////////////////////////////////////////////////////
 let handleaddtrash = async () => {
   const trashin = await fetch('http://192.168.1.95:3000/addtrash', {
             method: 'POST',
@@ -93,7 +106,7 @@ let handleaddtrash = async () => {
   const trash = await trashin.json();
   console.log("trashjson////", trash)
 }
-////////////////////////////////////////////////////////commandes overlays////////////////////////////////////////////////////////////////////////////    
+////////////////////////////////////////////////////////////////////////////commandes overlays////////////////////////////////////////////////////////////////////////////    
     const toggleOverlay = () => {
         setVisible(!visible);
       };
@@ -104,7 +117,7 @@ let handleaddtrash = async () => {
     const toggleInfo =() => {
       setVisibleInfo(!visible)
     }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
 <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
   <MapView style={{ flex: 1, display: 'flex', alignItems:'flex-end', justifyContent:'flex-end'}}
@@ -116,6 +129,7 @@ let handleaddtrash = async () => {
       longitudeDelta: 0.0421,
     }}>  
     {trashmark}
+    {trashstart}
     <Marker key={"currentPos"}
       pinColor="red"
       title="Je suis ici"
@@ -130,7 +144,7 @@ let handleaddtrash = async () => {
       <FontAwesome name="plus-square" size={30} color="#2c6e49" onPress={toggleOverlay} />
       <FontAwesome name="filter" size={30} color="#2c6e49" onPress={changestateover}/>
     </View>  
-{/* /////////////////////////////////////////////////////////////////////////////////////filtres///////////////////////////////////////////////////////////////////////*/}
+{/* /////////////////////////////////////////////////////////////////OVERLAY FILTRES////////////////////////////////////////////////////////////////////////////////////*/}
   <Overlay overlayStyle={styles.overlay} isVisible={overfilter} onBackdropPress={changestateover}>
     <Text style={{fontSize: 24}}>Que cherches tu ?</Text>
     <TouchableOpacity onPress={()=>console.log("click detect jaune")}>
@@ -147,7 +161,7 @@ let handleaddtrash = async () => {
     <Text style={styles.textover}>verre</Text>
     <Button  buttonStyle={styles.btnover} title='choisir'/>
   </Overlay>
-  {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
+{/* ////////////////////////////////////////////////////////////OVERLAY AJOUT POUBELLES///////////////////////////////////////////////////////////////////////////////// */}
   <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay}>
       <Text style={styles.text}>Veux tu ajouter un nouveau bac ?</Text>
     
@@ -155,14 +169,10 @@ let handleaddtrash = async () => {
           <Image source={require('./pin-jaune.png')}/>
         </TouchableOpacity>
         <Text>Papier, plastique, carton</Text>
-    
-    
         <TouchableOpacity onPress={() => trashmap('#d68c45')}>
           <Image source={require('./pin-noir.png')}/>
         </TouchableOpacity>
         <Text style={styles.textover}>Tout venant</Text>
-    
-    
         <TouchableOpacity onPress={() => trashmap('#00ff00')}>
           <Image source={require('./pin-vert.png')}/>
         </TouchableOpacity>
@@ -182,8 +192,7 @@ let handleaddtrash = async () => {
                 longitude: currentLongitude,
                 latitudeDelta: 0.0092,
                 longitudeDelta: 0.0092,
-              }}
-              >  
+              }}>  
               <Marker key={"currentPos"}
                 pinColor="red"
                 title="Je suis ici"
@@ -191,17 +200,12 @@ let handleaddtrash = async () => {
                 coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
                 onPress={toggleOverlay}
               />
-              {/* ///////ajouter ici le markeur de la benne/////// */}
-              
             </MapView>
-            <Button style={styles.button}
-               
-              onPress={() => setVisibleInfo(false)}
-              title="Retour"
-            />
+            <Button style={styles.button} onPress={() => setVisibleInfo(false)} title="Retour"/>
         </Overlay>
 </View>
 )};
+
 const styles = StyleSheet.create({
     btnover:{
       backgroundColor: '#2c6e49',
