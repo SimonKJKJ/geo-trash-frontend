@@ -24,20 +24,31 @@ const mapscreen = (props) => {
   const [pincolor, setPinColor] = useState('')
   const [visibleInfo,setVisibleInfo] = useState(false);
 ///////////////////////////////////////////////////////////////////////initialisation marqueur lancement appli /////////////////////////////////////////
+
+  const [latitudeClic,setLatitudeClic] = useState(0);
+  const [longitudeClic,setLongitudeClic] = useState(0);
+  const [distance, setDistance] = useState(0);
+  const [colorPinOverlayDistance,setColorPinOverlayDistance] = useState("");
+  const [coordOverlayDistance,setCoordOverlayDistance] = useState({});
+ 
+////////////////////////////////////////////////////////////////////////////initialisation marqueur lancement appli ///////////////////////////////////////////////////////////
   const [markers, setMarkers] = useState([]);
 
   useEffect(()=> {
     async function marker() {
       const mark = await fetch('http://192.168.1.95:3000/calltrash')
       const markjson = await mark.json();
+      console.log("markers", markjson)
       setMarkers(markjson.recuptrash)
     } 
     marker();
-  }, [])
-////////////////////////////////////////////////////////////////////////calcul distance////////////////////////////////////////////////////////////////
-function deg2rad(deg) {
+  }, [distance,colorPinOverlayDistance,coordOverlayDistance])
+  
+////////////////////////////////////////////////////////////////////////calcul distance///////////////////////////////////////////////////////////////
+function deg2rad(deg) { 
   return deg * (Math.PI/180)
 }
+//////////////////// Formule de Haversine pour le calcul de la distance entre 2 points////////////////////////////////////////////////////////////
 function getDistance(lat1, lon1, lat2, lon2) {
   var R = 6371;
   var dLat = deg2rad(lat2-lat1);
@@ -47,7 +58,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
     Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
     Math.sin(dLon/2) * Math.sin(dLon/2)
     ; 
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));  //Math.atan2 prend les coordonnées en abscisse et en ordonnée du point
   var d = Math.round((R * c)*1000)   //distance en mètre
   return d;
 }
@@ -92,7 +103,9 @@ let handleaddtrash = async () => {
   const trash = await trashin.json();
   console.log("trashjson////", trash)
 }
-////////////////////////////////////////////////////////////////////////////commandes overlays////////////////////////////////////////////////////////////////////////////    
+
+
+////////////////////////////////////////////////////////commandes overlays////////////////////////////////////////////////////////////////////////////    
     const toggleOverlay = () => {
         setVisible(!visible);
       };
@@ -138,11 +151,33 @@ let handleaddtrash = async () => {
 //   return <Marker key={i} onPress={toggleInfo} pinColor= {mark.color} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>
 //  }
 ////////////////////////////////////////////////////////////////////////////////////.map pour marqueurs lancement application///////////////////////////////////////////// 
-let trashstart = markers.map((mark,i) => {   
-  console.log("mark////", mark)
-return <Marker key={i} onPress={toggleInfo} pinColor= {mark.color} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>
-})
+// let trashstart = markers.map((mark,i) => {   
+//   console.log("mark////", mark)
+// return <Marker key={i} onPress={toggleInfo} pinColor= {mark.color} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>
+// })
 /////////////////////////////////////////////////////////////////////////INTEGRATION MAP//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////Fonction pour OVERLAY DISTANCE trash////////////////////////////////////////////////////////////
+    let handleClicTrash = (markerLat, markerLong, colorpin) =>{
+      setVisibleInfo(!visible)
+      setLatitudeClic(markerLat)
+      setLongitudeClic(markerLong)
+      setColorPinOverlayDistance(colorpin)
+      setCoordOverlayDistance({latitude: latitudeClic, longitude: longitudeClic})
+      console.log("MARKER LAT", markerLat)
+      console.log("MARKER LONG", markerLong)
+      console.log("COLORPIN", colorpin)
+      console.log("COLORPIN OVERLAY DISTANCE", colorPinOverlayDistance)
+      console.log("LATITUDE CLIC", latitudeClic)
+      console.log("LONGITUDE CLIC", longitudeClic)
+      setDistance(getDistance(currentLatitude, currentLongitude,latitudeClic,longitudeClic))
+      console.log("DISTANCE", distance)
+      
+    }
+
+    let trashstart = markers.map((mark,i) => {   
+      return <Marker key={i} pinColor= {mark.color} onPress={()=>handleClicTrash(mark.latitude,mark.longitude,mark.color)} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>   
+    })
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
 <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
   <MapView style={{ flex: 1, display: 'flex', alignItems:'flex-end', justifyContent:'flex-end'}}
@@ -160,10 +195,12 @@ return <Marker key={i} onPress={toggleInfo} pinColor= {mark.color} coordinate={{
       title="Je suis ici"
       description="Ma position"
       coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}/>
+      {/* ///////////////////////////////////////////////////////Marqueur test ////////////////////////////////////////////////////////////////// */}
       <Marker pinColor="green"
               coordinate={{latitude: 43.29, longitude: 5.37}}
               onPress={toggleInfo}
               />
+      {/* ///////////////////////////////////////////////////////Fin Marqueur test/////////////////////////////////////////////////////////////////////////// */}
   </MapView>
     <View style={{flexDirection:'row', justifyContent:'space-around'}}>
       <FontAwesome name="plus-square" size={30} color="#2c6e49" onPress={toggleOverlay} />
@@ -207,7 +244,7 @@ return <Marker key={i} onPress={toggleInfo} pinColor= {mark.color} coordinate={{
   </Overlay>
   <Overlay style={styles.overl} isVisible={visibleInfo} onBackdropPress={toggleInfo}>
             <Text style={styles.text}>
-              Courage ! Tu es à seulement {getDistance(currentLatitude, currentLongitude, 43.325783, 5.366766)} mètres !
+              Courage ! {"\n"} Tu es à {distance} mètres {"\n"} à vol d'oiseau !
             </Text>
             <MapView
               style={styles.overl}
@@ -224,8 +261,18 @@ return <Marker key={i} onPress={toggleInfo} pinColor= {mark.color} coordinate={{
                 coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
                 onPress={toggleOverlay}
               />
+              <Marker pinColor={colorPinOverlayDistance}
+              coordinate={coordOverlayDistance}
+              onPress={toggleInfo}
+              />
+              
             </MapView>
-            <Button style={styles.button} onPress={() => setVisibleInfo(false)} title="Retour"/>
+            <Button containerStyle={{width: "80%", marginTop:10, marginBottom: 100}} 
+              buttonStyle={styles.button}
+               
+              onPress={() => setVisibleInfo(false)}
+              title="Retour"
+            />
         </Overlay>
 </View>
 )};
@@ -262,7 +309,6 @@ const styles = StyleSheet.create({
       fontWeight:'bold',
       fontSize:20,
       margin:30,
-      alignItems :'center'
     },
     bloc:{
       display:'flex',
@@ -284,11 +330,9 @@ const styles = StyleSheet.create({
       justifyContent:'center'
     },
     button:{
-      marginBottom : 10,
       borderRadius: 15,
-      width:'50%',
-      color:'#2c6e49'
-    }
+      backgroundColor:'#2c6e49',
+  }
 
 })
 

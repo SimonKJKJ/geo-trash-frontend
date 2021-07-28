@@ -1,76 +1,79 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Overlay, Button} from 'react-native-elements';
+import Swiper from 'react-native-swiper';
+import {Card, Button} from 'react-native-elements';
 
 const parcourchoix = (props) => {
     return (
-    <View style={styles.container}>
-            <Text>PARCOURS</Text>
-            <Button title="voir mon trajet" onPress={() => {props.navigation.navigate('trajet')}}/>
-    </View>
+        <Swiper style={styles.wrapper} showsButtons={true}>
+        <View style={styles.slide}>
+          <Text style={styles.text}>Parcours Niveau 1</Text>
+          <Card containerStyle={{padding: 30,margin:10,marginBottom:10}} >
+              <Card.Title>Attaque au centre ville</Card.Title>
+              <Card.Image source={require('./parcours-marseille.png')}></Card.Image>
+              <Text>Temps du parcours : 1h30</Text>
+              <Text>Distance à parcourir : 1,5km</Text>
+              <Button  
+              containerStyle={{width: "80%", marginTop:10, marginBottom: 100}} 
+              buttonStyle={styles.button} 
+              onPress={() =>props.navigation.navigate('trajet')}
+              title='Démarrer'
+              /> 
+          </Card>
+        </View>
+        <View style={styles.slide}>
+          <Text style={styles.text}>Parcours Niveau 2</Text>
+          <Card containerStyle={{padding: 30,margin:10,marginBottom:10}} >
+              <Card.Title>LES FONDS MARINS</Card.Title>
+              <Card.Image source={require('./parcours-marseille.png')}></Card.Image>
+              <Text>Temps du parcours : 2h15</Text>
+              <Text>Distance à parcourir : 2,7km</Text>
+              <Button  
+              containerStyle={{width: "80%", marginTop:10, marginBottom: 100}} 
+              buttonStyle={styles.button} 
+              onPress={() =>props.navigation.navigate('trajetparcour')}
+              title='Démarrer'
+              /> 
+          </Card>
+        </View>
+        <View style={styles.slide}>
+          <Text style={styles.text}>Parcours Niveau 3</Text>
+          <Card containerStyle={{padding: 30,margin:10,marginBottom:10}} >
+              <Card.Title>LES ARBRES PARLENT</Card.Title>
+              <Card.Image source={require('./parcours-marseille.png')}></Card.Image>
+              <Text>Temps du parcours : 3h30</Text>
+              <Text>Distance à parcourir : 3,1km</Text>
+              <Button  
+              containerStyle={{width: "80%", marginTop:10, marginBottom: 100}} 
+              buttonStyle={styles.button} 
+              onPress={() =>props.navigation.navigate('trajetparcour')}
+              title='Démarrer'
+              /> 
+          </Card>
+        </View>
+      </Swiper>
     );
 };
 const styles = StyleSheet.create({
-    btnover:{
-      backgroundColor: '#2c6e49',
-      borderRadius: 15,
-      marginTop: 15
+    wrapper: {},
+    slide: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#2c6e49'
     },
-    overlay:{
-      flexDirection:'column',
-      alignItems:'center',
-      backgroundColor: '#fff'
-    },
-    textover:{
-      textAlign: 'center'
-    },
-
-    btn:{
-      flex:1,
-      flexDirection: 'row',
-      alignItems:'center',
-      justifyContent:'center',
-      backgroundColor:'transparent'
-    },
-    container:{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#fff'
-    },
-    text:{
-      fontWeight:'bold',
-      fontSize:20,
-      margin:30,
-      alignItems :'center'
-    },
-    bloc:{
-      display:'flex',
-      flexDirection:'row',
-      alignItems:'center',
-      justifyContent:'center'
-    },
-    image:{
-      resizeMode:'contain',
-      flex:1,
-      width :100
-    },
-    overl:{
-      display:'flex',
-      flex :1,
-      width : 300,
-      margin:10,
-      alignItems:'center',
-      justifyContent:'center'
+    
+    text: {
+      color: '#fff',
+      fontSize: 30,
+      fontWeight: 'bold'
     },
     button:{
-      marginBottom : 10,
-      borderRadius: 15,
-      width:'50%',
-      color:'#2c6e49'
+        borderRadius: 15,
+        backgroundColor:'#2c6e49',
+        width:"100%"
     }
-
-})
+  })
 
 
 export default parcourchoix;
