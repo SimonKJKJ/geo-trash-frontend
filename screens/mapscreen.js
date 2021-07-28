@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View , Image, TouchableOpacity } from 'react-native';
 import { Overlay, Button} from 'react-native-elements';
 import MapView, { Marker } from 'react-native-maps';
@@ -8,9 +8,9 @@ import { FontAwesome } from '@expo/vector-icons';
 const mapscreen = (props) => {
 /////////////////////////////////////////////////////////////////////////////////27 juillet 2021 20h52///////////////////////////////////////////////////  
 ////////////////////////////////////////////////////////////////////////////////pin couleur + au clic///////////////////////////////////////////////////  
-  const [pinYellow, setPinYellow] = useState(0);
-  const [pinBlack, setPinBlack] = useState(0);
-  const [pinGreen, setPinGreen] = useState(0);
+  const [pinYellow, setPinYellow] = useState('');
+  const [pinBlack, setPinBlack] = useState('');
+  const [pinGreen, setPinGreen] = useState('');
 //////////////////////////////////////////////////////////////////////////////////coordonnées users/////////////////////////////////////////////////////  
   const [currentLatitude, setCurrentLatitude] = useState(0);
   const [currentLongitude, setCurrentLongitude] = useState(0);
@@ -29,23 +29,11 @@ const mapscreen = (props) => {
   useEffect(()=> {
     async function marker() {
       const mark = await fetch('http://192.168.1.95:3000/calltrash')
-      console.log("plein le cul---", mark)
       const markjson = await mark.json();
-      console.log("markjsion--", markjson)
-      console.log("markers4//", markjson.recuptrash[0].latitude)
-      console.log("markers4//", markjson.recuptrash[1].latitude)
-      console.log("markers4//", markjson.recuptrash[0].longitude)
-      console.log("markers4//", markjson.recuptrash[1].longitude)
-      console.log("markers4//", markjson.recuptrash[0].color)
-      console.log("markers4//", markjson.recuptrash[1].color)
       setMarkers(markjson.recuptrash)
     } 
     marker();
   }, [])
-
-  let trashstart = markers.map((mark,i) => {
-  return <Marker key={i} pinColor= {mark.color} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>
-  })
 ////////////////////////////////////////////////////////////////////////calcul distance////////////////////////////////////////////////////////////////
 function deg2rad(deg) {
   return deg * (Math.PI/180)
@@ -84,7 +72,6 @@ let trash = (onPress) => {
   console.log("trashlatitude////", onPress.nativeEvent.coordinate.latitude)
   console.log("trashlongitude////", onPress.nativeEvent.coordinate.longitude)
 }
-
 let trashmap = (colorMarker) => {
   setTrashList([...trashlist, {longitude: loctrash.longitude, latitude: loctrash.latitude}])
   setPinColor(colorMarker)
@@ -92,9 +79,8 @@ let trashmap = (colorMarker) => {
   handleaddtrash();
   setVisible(!visible);
 }
-
 let trashmark = trashlist.map((trash, i) => {
-  return <Marker key={i} pinColor= {pincolor} coordinate={{latitude: trash.latitude, longitude: trash.longitude}}/>
+  return <Marker key={i}  pinColor= {pincolor} coordinate={{latitude: trash.latitude, longitude: trash.longitude}}/>
 })
 ///////////////////////////////////////////////////////////////////////////////////////////////requête controlleur/////////////////////////////////////////////////////////
 let handleaddtrash = async () => {
@@ -110,14 +96,53 @@ let handleaddtrash = async () => {
     const toggleOverlay = () => {
         setVisible(!visible);
       };
-
     const changestateover =()=> {
       setOverfilter(!overfilter)
     }
     const toggleInfo =() => {
       setVisibleInfo(!visible)
     }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////commande filtres/////////////////////////////////////////////////////////////////////
+////////////////// 1- boucle sur tableau markers ////////////////////////////////////
+////////////////// 2- acceder a la propriété color //////////////////////////////////
+////////////////// 3- filtre par couleur ////////////////////////////////////////////
+////////////////// 4- push color copie //////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////A REVOIR/////////////////////////////////////////////
+// const getMarkerFromColor = (colormark) => {
+//   console.log("colormark", colormark)
+//   console.log("markers//", markers)
+//   let copie = [];
+//   markers.map((mark, i)=> {
+//     if(mark.color === colormark) {
+//       console.log("ca merde !")
+//       const xx = [... copie, mark.color]
+//       console.log("mark////", xx)
+//     }
+//   })
+//   setMarkers(copie)
+// }
+// let copie = [...markers]
+//  console.log("copiei color/", copie)
+// for(let i=0; i<markers.length; i++){
+//   copie.push(markers[i].color)
+//   console.log("colormarkcopie", copie[i].color)
+//  }
+// if(copie[i].color =="#ff0") {
+//    console.log("jaune")
+//    return <Marker key={i} onPress={toggleInfo} pinColor= "#ff0" coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>
+//  } else if (copie[i].color == "#d68c45") {
+//   return <Marker key={i} onPress={toggleInfo} pinColor= "#d68c45" coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>
+//  } else if (copie[i].color == "#00ff00"){
+//   return <Marker key={i} onPress={toggleInfo} pinColor= "#00ff00" coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>
+//  } else {
+//   return <Marker key={i} onPress={toggleInfo} pinColor= {mark.color} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>
+//  }
+////////////////////////////////////////////////////////////////////////////////////.map pour marqueurs lancement application///////////////////////////////////////////// 
+let trashstart = markers.map((mark,i) => {   
+  console.log("mark////", mark)
+return <Marker key={i} onPress={toggleInfo} pinColor= {mark.color} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>
+})
+/////////////////////////////////////////////////////////////////////////INTEGRATION MAP//////////////////////////////////////////////////////////////////////////////////
     return (
 <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
   <MapView style={{ flex: 1, display: 'flex', alignItems:'flex-end', justifyContent:'flex-end'}}
@@ -147,15 +172,15 @@ let handleaddtrash = async () => {
 {/* /////////////////////////////////////////////////////////////////OVERLAY FILTRES////////////////////////////////////////////////////////////////////////////////////*/}
   <Overlay overlayStyle={styles.overlay} isVisible={overfilter} onBackdropPress={changestateover}>
     <Text style={{fontSize: 24}}>Que cherches tu ?</Text>
-    <TouchableOpacity onPress={()=>console.log("click detect jaune")}>
+    <TouchableOpacity onPress={()=>getMarkerFromColor("#ff0")}>
       <Image source={require('./pin-jaune.png')}/>
     </TouchableOpacity>
       <Text style={styles.textover}>papier, pastique, carton</Text>
-    <TouchableOpacity onPress={()=>console.log("click detect noir")}>
+    <TouchableOpacity onPress={()=>getMarkerFromColor('#d68c45')}>
       <Image source={require('./pin-noir.png')}/>
     </TouchableOpacity>
     <Text style={styles.textover}>tout venant</Text>
-    <TouchableOpacity onPress={()=>console.log("click detect vert")}>
+    <TouchableOpacity onPress={()=>getMarkerFromColor('#00ff00')}>
       <Image source={require('./pin-vert.png')}/>
     </TouchableOpacity>
     <Text style={styles.textover}>verre</Text>
@@ -180,7 +205,6 @@ let handleaddtrash = async () => {
     
     <Button buttonStyle={styles.btnover} title="Valider"/>
   </Overlay>
-
   <Overlay style={styles.overl} isVisible={visibleInfo} onBackdropPress={toggleInfo}>
             <Text style={styles.text}>
               Courage ! Tu es à seulement {getDistance(currentLatitude, currentLongitude, 43.325783, 5.366766)} mètres !

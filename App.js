@@ -62,6 +62,7 @@ export default function App() {
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="login" component={login} />
         <Stack.Screen name="signup" component={signup} />
+        <Stack.Screen name="trajet" component={trajetparcour} />
         <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
       </Stack.Navigator>
   </NavigationContainer>
