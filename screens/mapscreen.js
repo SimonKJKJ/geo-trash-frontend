@@ -7,9 +7,9 @@ import * as Permissions from 'expo-permissions';
 import { FontAwesome } from '@expo/vector-icons'; 
 const mapscreen = (props) => {
 ////////////////////////////////////////////////////////////////////////////////pin couleur + au clic///////////////////////////////////////////////////  
-  const [pinYellow, setPinYellow] = useState('');
-  const [pinBlack, setPinBlack] = useState('');
-  const [pinGreen, setPinGreen] = useState('');
+  const [pinYellow, setPinYellow] = useState(0);
+  const [pinBlack, setPinBlack] = useState(0);
+  const [pinGreen, setPinGreen] = useState(0);
 //////////////////////////////////////////////////////////////////////////////////coordonnées users/////////////////////////////////////////////////////  
   const [currentLatitude, setCurrentLatitude] = useState(0);
   const [currentLongitude, setCurrentLongitude] = useState(0);
@@ -26,10 +26,11 @@ const mapscreen = (props) => {
   const [latitudeClic,setLatitudeClic] = useState(0);
   const [longitudeClic,setLongitudeClic] = useState(0);
   const [distance, setDistance] = useState(0);
-  const [colorPinOverlayDistance,setColorPinOverlayDistance] = useState("");
+  const [colorPinOverlayDistance,setColorPinOverlayDistance] = useState("#ff0");
   const [coordOverlayDistance,setCoordOverlayDistance] = useState({});
 ////////////////////////////////////////////////////////////////////////////initialisation marqueur lancement appli ////////////////////////////////////
   const [markers, setMarkers] = useState([]);
+  
 
   useEffect(()=> {
     async function marker() {
@@ -39,7 +40,7 @@ const mapscreen = (props) => {
       setMarkers(markjson.recuptrash)
     } 
     marker();
-  }, [distance,colorPinOverlayDistance,coordOverlayDistance])
+  }, [])
 ////////////////////////////////////////////////////////////////////////calcul distance///////////////////////////////////////////////////////////////
 function deg2rad(deg) { 
   return deg * (Math.PI/180)
@@ -87,6 +88,11 @@ let trashmap = (colorMarker) => {
   setTrashList([...trashlist, {longitude: loctrash.longitude, latitude: loctrash.latitude}])
   setPinColor(colorMarker)
   console.log("COLORMARKER////", pincolor)
+  if(colorMarker === "#ff0"){
+    setPinYellow(pinYellow+1)
+  } else if (colorMarker === "#d68c45"){
+    setPinBlack(pinBlack+1)
+  } else { setPinGreen(pinGreen+1) }
   handleaddtrash();
   setVisible(!visible);
 }
@@ -202,7 +208,7 @@ let handleaddtrash = async () => {
   </Overlay>
 {/* ////////////////////////////////////////////////////////////OVERLAY AJOUT POUBELLES///////////////////////////////////////////////////////////////// */}
   <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay}>
-      <Text style={styles.text}>Veux tu ajouter un nouveau bac ?</Text>
+      <Text style={styles.text}>tu as trouver un nouveau bac ?</Text>
     
         <TouchableOpacity onPress={() => trashmap('#ff0')}> 
           <Image source={require('./pin-jaune.png')}/>
@@ -216,6 +222,9 @@ let handleaddtrash = async () => {
           <Image source={require('./pin-vert.png')}/>
         </TouchableOpacity>
         <Text>Verre</Text>
+        {console.log("numberyellow",pinYellow)}
+        {console.log("numberblack",pinBlack)}
+        {console.log("numbergreen",pinGreen)}
     
     <Button buttonStyle={styles.btnover} title="Valider"/>
   </Overlay>

@@ -4,6 +4,8 @@ import { Overlay} from 'react-native-elements';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import CountDown from 'react-native-countdown-component';
+
 
 const trajetparcour2 = () => {
     const [visible, setVisible] = useState(false);
@@ -70,7 +72,14 @@ return (
               >
                 <Overlay isVisible={olmission} onBackdropPress={toggleMission} style={{backgroundColor: "red", padding: 10}}>
                   <Text>{missions}</Text>
-                  {/* <Button title="ok je fonce" onPress={toggleMission}/> */}
+                  <CountDown
+                until={60*5+30}
+                onFinish={() => alert('temps écoulé ! bravo !')}
+                onPress={() => alert('a toi de jouer !')}
+                timeToShow={['M', 'S']}
+                timeLabels={{m: 'Minutes', s: 'Secondes'}}
+                size={20}
+              />
                 </Overlay>
               </Marker>
             </MapView>

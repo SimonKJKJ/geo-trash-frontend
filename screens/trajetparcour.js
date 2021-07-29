@@ -5,6 +5,10 @@ import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { FontAwesome } from '@expo/vector-icons';
+import CountDown from 'react-native-countdown-component';
+
+
+
 
 const trajetparcour = () => {
     const [currentLatitude, setCurrentLatitude] = useState(0);
@@ -12,6 +16,7 @@ const trajetparcour = () => {
     const [missions, setMissions] = useState("");
     const [olmission, setOlmission] = useState(false);
 
+//////////////////////////////////////////////////////////////////////countdown/////////////////////////////////////////////
     const toggleMission = () => {
       setOlmission(!olmission);
     };  
@@ -30,7 +35,7 @@ const trajetparcour = () => {
         }
         askPermissions();
       }, []);
-
+/////////////////////////////////////////////////////////////////générateur de mission aléatoire//////////////////////////////////////////
       let mission = ["cours le plus vite possible vers les bac de tri les plus proche ! p.s: fais attention aux voitures",
       "ramasse le plus vite possible 10 déchets autour de toi ! depeche toi le chrono va démarrer !",
       "demande à tes parents de t'aider à organiser une sortie avec tes amis pour ramasser des déchets dans la nature !"];
@@ -54,7 +59,7 @@ return (
               longitude: currentLongitude,
               latitudeDelta: 0.0092,
               longitudeDelta: 0.0092,
-            }}>  
+            }}> 
             <Marker key={"currentPos"}
               pinColor="red"
               title="Je suis ici"
@@ -62,17 +67,24 @@ return (
               coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
             />
         
-            <Marker
-              onPress={()=>handleoverlayclick()}
-              pinColor="green"
-              coordinate={{ latitude: 44.012735, longitude: 4.876297 }}
-            >
-              <Overlay isVisible={olmission} onBackdropPress={toggleMission} style={{backgroundColor: "red", padding: 10}}>
-                <Text>{missions}</Text>
-                {/* <Button title="ok je fonce" onPress={toggleMission}/> */}
-              </Overlay>
-            </Marker>
-          </MapView>
+        <Marker
+          onPress={()=>handleoverlayclick()}
+          pinColor="green"
+          coordinate={{ latitude: 44.012735, longitude: 4.876297 }}
+        >
+          <Overlay isVisible={olmission} onBackdropPress={toggleMission}>
+            <Text>{missions}</Text>
+              <CountDown
+                until={60*10}
+                onFinish={() => alert('temps écoulé ! bravo !')}
+                onPress={() => alert('a toi de jouer !')}
+                timeToShow={['M', 'S']}
+                timeLabels={{m: 'Minutes', s: 'Secondes'}}
+                size={20}
+              />
+          </Overlay>
+        </Marker>
+      </MapView>
   </View>
   );
 };
