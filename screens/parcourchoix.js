@@ -9,7 +9,7 @@ const parcourchoix = (props) => {
         <View style={styles.slide}>
           <Text style={styles.text}>Parcours Niveau 1</Text>
           <Card containerStyle={{padding: 30,margin:10,marginBottom:10}} >
-              <Card.Title>Attaque au centre ville</Card.Title>
+              <Card.Title>ATTAQUE AU CENTRE VILLE</Card.Title>
               <Card.Image source={require('./parcours-marseille.png')}></Card.Image>
               <Text>Temps du parcours : 1h30</Text>
               <Text>Distance à parcourir : 1,5km</Text>
@@ -39,7 +39,7 @@ const parcourchoix = (props) => {
         <View style={styles.slide}>
           <Text style={styles.text}>Parcours Niveau 3</Text>
           <Card containerStyle={{padding: 30,margin:10,marginBottom:10}} >
-              <Card.Title>LES ARBRES PARLENT</Card.Title>
+              <Card.Title>LA FORET ENCHANTEE</Card.Title>
               <Card.Image source={require('./parcours-marseille.png')}></Card.Image>
               <Text>Temps du parcours : 3h30</Text>
               <Text>Distance à parcourir : 3,1km</Text>
@@ -74,6 +74,5 @@ const styles = StyleSheet.create({
         width:"100%"
     }
   })
-
 
 export default parcourchoix;
