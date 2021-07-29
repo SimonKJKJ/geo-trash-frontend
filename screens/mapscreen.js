@@ -33,7 +33,7 @@ const mapscreen = (props) => {
 
   useEffect(()=> {
     async function marker() {
-      const mark = await fetch('http://192.168.244.167:3000/calltrash')
+      const mark = await fetch('http://192.168.1.27:3000/calltrash')
       const markjson = await mark.json();
       console.log("markers", markjson)
       setMarkers(markjson.recuptrash)
@@ -95,7 +95,7 @@ let trashmark = trashlist.map((trash, i) => {
 })
 ///////////////////////////////////////////////////////////////////////////////////////////////requête controlleur/////////////////////////////////////////////////////////
 let handleaddtrash = async () => {
-  const trashin = await fetch('http://192.168.244.167:3000/addtrash', {
+  const trashin = await fetch('http://192.168.1.27:3000/addtrash', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: `latitude=${loctrash.latitude}&longitude=${loctrash.longitude}&color=${pincolor}`

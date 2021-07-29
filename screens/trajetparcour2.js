@@ -13,6 +13,52 @@ const trajetparcour2 = () => {
     const [visibleInfo,setVisibleInfo] = useState(false);
     const [missions, setMissions] = useState("");
 
+    ///////////////////////////////////////VARIABLES PARCOURS 2//////////////////////////////////////
+    const routeName ="LES FONDS MARINS";
+    const timeRoute ="2h15";
+    const distanceRoute="2,7km";
+    const coordDepart= {lat : 43.261262,long:5.379513};
+    const coodArrival={lat:43.257704,long:5.376038};
+    const coordTrip=[{lat : 43.261114,long:5.379134},
+        {lat : 43.260690,long:5.379391},
+        {lat : 43.260325,long:5.379635},
+        {lat : 43.259419,long:5.380203},
+        {lat : 43.258847,long:5.380582},
+        {lat : 43.258404,long:5.380866},
+        {lat : 43.257950,long:5.381164},
+        {lat : 43.257078,long:5.381443},
+        {lat : 43.256285,long:5.381698},
+        {lat : 43.255690,long:5.381585},
+        {lat : 43.255081,long:5.381016},
+        {lat : 43.254839,long:5.380437},
+        {lat : 43.254587,long:5.379781},
+        {lat : 43.254478,long:5.379241},
+        {lat : 43.254538,long:5.377938},
+        {lat : 43.254611,long:5.376609},
+        {lat : 43.254810,long:5.375273},
+        {lat : 43.255524,long:5.375173},
+        {lat : 43.256582,long:5.375763},
+        {lat : 43.257096,long:5.375779},
+    ];
+    const coordDefi=[{lat : 43.259862,long:5.379932},
+        {lat : 43.257520,long:5.381623},
+        {lat : 43.254822,long:5.376053},
+        {lat : 43.255215,long:5.374991},
+        {lat : 43.256316,long:5.375298}
+    ];
+    const DefiName =["La fontaine","Le chateau","L'esplanade", "Le sable chaud","Les pieds dans l'eau"]
+  
+    var markerTrajRoute = coordTrip.map((route, i) => {
+        return <Marker key={i} pinColor="green" coordinate={{ latitude: route.lat, longitude: route.long }}
+        />
+    });
+    
+    var markerTrajDefis = coordDefi.map((defi, i) => {
+        return <Marker key={i} pinColor="blue" coordinate={{ latitude: defi.lat, longitude: defi.long }}
+        />
+    });
+
+
     const toggleInfo =() => {
         setVisibleInfo(!visible)
       }
@@ -52,10 +98,10 @@ return (
             <MapView
               style={{ flex: 1, display: 'flex', alignItems:'flex-end', justifyContent:'flex-end'}}
               initialRegion={{
-                latitude: currentLatitude,
-                longitude: currentLongitude,
-                latitudeDelta: 0.0092,
-                longitudeDelta: 0.0092,
+                latitude: 43.257430,
+                longitude: 5.378762,
+                latitudeDelta: 0.0072,
+                longitudeDelta: 0.0072,
               }}>  
               <Marker key={"currentPos"}
                 pinColor="red"
@@ -64,6 +110,8 @@ return (
                 coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
                 onPress={toggleOverlay}
               />
+              {markerTrajRoute}
+              {markerTrajDefis}
           
               <Marker
                 onPress={()=>missionAleatoire()}
