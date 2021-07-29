@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View , Image, TouchableOpacity } from 'react-native';
-import { Overlay, Button} from 'react-native-elements';
+import { Overlay} from 'react-native-elements';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-import { FontAwesome } from '@expo/vector-icons';
 
 const trajetparcour2 = () => {
     const [visible, setVisible] = useState(false);
     const [currentLatitude, setCurrentLatitude] = useState(0);
     const [currentLongitude, setCurrentLongitude] = useState(0);
-    const [visibleInfo,setVisibleInfo] = useState(false);
     const [missions, setMissions] = useState("");
+    const [olmission, setOlmission] = useState(false);
 
     ///////////////////////////////////////VARIABLES PARCOURS 2//////////////////////////////////////
     const routeName ="LES FONDS MARINS";
@@ -66,6 +65,9 @@ const trajetparcour2 = () => {
     const toggleOverlay = () => {
         setVisible(!visible);
       };
+    const toggleMission = () => {
+        setOlmission(!olmission);
+      };  
 
       useEffect(() => {
         async function askPermissions() {
@@ -93,6 +95,10 @@ console.log("nm", newmission.length)
 console.log("nmrandom", newmission[random])
 
 }
+let handleoverlayclick = () => {
+    missionAleatoire();
+    toggleMission()
+}
 return (
     <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
             <MapView
@@ -108,22 +114,21 @@ return (
                 title="Je suis ici"
                 description="Ma position"
                 coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
-                onPress={toggleOverlay}
               />
               {markerTrajRoute}
               {markerTrajDefis}
           
               <Marker
-                onPress={()=>missionAleatoire()}
+                onPress={()=>handleoverlayclick()}
                 pinColor="green"
-                title="MISSION"
-                description={missions}
                 coordinate={{ latitude: 44.012735, longitude: 4.876297 }}
               >
-                {/* <View style={{backgroundColor: "red", padding: 10}}>
+                <Overlay isVisible={olmission} onBackdropPress={toggleMission} style={{backgroundColor: "red", padding: 10}}>
                   <Text>{missions}</Text>
-                </View> */}
+                </Overlay>
+
               </Marker>
+              
             </MapView>
     </View>
     );

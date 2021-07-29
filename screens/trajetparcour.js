@@ -7,11 +7,9 @@ import * as Permissions from 'expo-permissions';
 import { FontAwesome } from '@expo/vector-icons';
 
 const trajetparcour = () => {
-    const [visible, setVisible] = useState(false);
-    const [currentLatitude, setCurrentLatitude] = useState(0);
-    const [currentLongitude, setCurrentLongitude] = useState(0);
-    const [visibleInfo,setVisibleInfo] = useState(false);
-    const [missions, setMissions] = useState("");
+const [currentLatitude, setCurrentLatitude] = useState(0);
+const [currentLongitude, setCurrentLongitude] = useState(0);
+const [missions, setMissions] = useState("");
 ///////////////////////////////////////VARIABLES PARCOURS 1//////////////////////////////////////
 const coordDepart= {lat : 49.295048,long:5.375826};
 const coodArrival={lat:43.294295,long:5.374474};
@@ -63,6 +61,11 @@ const toggleInfo =() => {
 const toggleOverlay = () => {
     setVisible(!visible);
     };
+const [olmission, setOlmission] = useState(false);
+
+const toggleMission = () => {
+    setOlmission(!olmission);
+};  
 
 useEffect(() => {
 async function askPermissions() {
@@ -89,51 +92,53 @@ setMissions(newmission[random])
 console.log("nm", newmission.length)
 console.log("nmrandom", newmission[random])
 }
+let handleoverlayclick = () => {
+    missionAleatoire();
+    toggleMission()
+}
 
-    return (
+return (
     <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
-            <MapView
-              style={{ flex: 1, display: 'flex', alignItems:'flex-end', justifyContent:'flex-end'}}
-              initialRegion={{
-                latitude: 43.293936,
-                longitude: 5.375907,
-                latitudeDelta: 0.0092,
-                longitudeDelta: 0.0092,
-              }}>  
-              <Marker key={"currentPos"}
-                pinColor="red"
-                title="Je suis ici"
-                description="Ma position"
-                coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
-                onPress={toggleOverlay}
-              />
-              {/* ////////////////PARCOURS///////////// */}
-              
-              <Marker pinColor="red"
-              title="Départ"
-              coordinate={{latitude : 49.295048,longitude :5.375826}}
-              />
+        <MapView
+            style={{ flex: 1, display: 'flex', alignItems:'flex-end', justifyContent:'flex-end'}}
+            initialRegion={{
+            latitude: 43.293936,
+            longitude: 5.375907,
+            latitudeDelta: 0.0092,
+            longitudeDelta: 0.0092,
+        }}>
+            <Marker key={"currentPos"}
+                        pinColor="red"
+                        title="Je suis ici"
+                        description="Ma position"
+                        coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
+                        onPress={toggleOverlay}
+            />
+             <Marker pinColor="red"
+                    title="Départ"
+                    coordinate={{latitude : 49.295048,longitude :5.375826}}
+            />
+            <Marker
+                    onPress={()=>handleoverlayclick()}
+                    pinColor="green"
+                    coordinate={{ latitude: 44.012735, longitude: 4.876297 }}
+            >
+                 <Overlay isVisible={olmission} onBackdropPress={toggleMission}>
+                    <Text>{missions}</Text>
+                </Overlay>
 
-              {markerTrajRoute}
-              {markerTrajDefis}
+            </Marker>
 
-              {/* ///////////////////////////////////// */}
-          
-              <Marker
-                onPress={()=>missionAleatoire()}
-                pinColor="green"
-                title="MISSION"
-                description={missions}
-                coordinate={{ latitude: 44.012735, longitude: 4.876297 }}
-              >
-                {/* <View style={{backgroundColor: "red", padding: 10}}>
-                  <Text>{missions}</Text>
-                </View> */}
-              </Marker>
-            </MapView>
+            {markerTrajRoute}
+            {markerTrajDefis}
+
+        </MapView>
+    
     </View>
-    );
+    )
+
 };
+
 const styles = StyleSheet.create({
     btnover:{
       backgroundColor: '#2c6e49',
@@ -194,6 +199,6 @@ const styles = StyleSheet.create({
       color:'#2c6e49'
     }
 
-})
+});
 
 export default trajetparcour;
