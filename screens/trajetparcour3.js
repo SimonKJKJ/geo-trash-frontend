@@ -1,26 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View , Image, TouchableOpacity } from 'react-native';
 import { Overlay, Button} from 'react-native-elements';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { FontAwesome } from '@expo/vector-icons';
 
-const trajetparcour = () => {
+const trajetparcour3 = () => {
     const [visible, setVisible] = useState(false);
     const [currentLatitude, setCurrentLatitude] = useState(0);
     const [currentLongitude, setCurrentLongitude] = useState(0);
     const [visibleInfo,setVisibleInfo] = useState(false);
     const [missions, setMissions] = useState("");
+    const [olmission, setOlmission] = useState(false);
 
 
+    const toggleMission = () => {
+        setOlmission(!visible);
+      };   
     const toggleInfo =() => {
         setVisibleInfo(!visible)
       }
-
     const toggleOverlay = () => {
         setVisible(!visible);
       };
+    
 
       useEffect(() => {
         async function askPermissions() {
@@ -37,49 +41,49 @@ const trajetparcour = () => {
         askPermissions();
       }, []);
 
-      let mission = ["cours le plus vite possible vers les bac de tri les plus proche ! p.s: fais attention aux voitures",
-      "ramasse le plus vite possible 10 déchets autour de toi ! depeche toi le chrono va démarrer !",
-      "demande à tes parents de t'aider à organiser une sortie avec tes amis pour ramasser des déchets dans la nature !"];
-let newmission = [...mission];
-function missionAleatoire() {
-let random = Math.floor(Math.random()*newmission.length);
-setMissions(newmission[random])
-console.log("nm", newmission.length)
-console.log("nmrandom", newmission[random])
-}
-
+    let mission = ["cours le plus vite possible vers les bac de tri les plus proche ! p.s: fais attention aux voitures",
+                    "ramasse le plus vite possible 10 déchets autour de toi ! depeche toi le chrono va démarrer !",
+                    "demande à tes parents de t'aider à organiser une sortie avec tes amis pour ramasser des déchets dans la nature !"];
+    let newmission = [...mission];
+    function missionAleatoire() {
+        toggleMission()
+        let random = Math.floor(Math.random()*newmission.length);
+        setMissions(newmission[random])
+    console.log("nm", newmission.length)
+    console.log("nmrandom", newmission[random])
+    }
     return (
-    <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
-            <MapView
-              style={{ flex: 1, display: 'flex', alignItems:'flex-end', justifyContent:'flex-end'}}
-              initialRegion={{
-                latitude: currentLatitude,
-                longitude: currentLongitude,
-                latitudeDelta: 0.0092,
-                longitudeDelta: 0.0092,
-              }}>  
-              <Marker key={"currentPos"}
-                pinColor="red"
-                title="Je suis ici"
-                description="Ma position"
-                coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
-                onPress={toggleOverlay}
-              />
-          
-              <Marker
-                onPress={()=>missionAleatoire()}
-                pinColor="green"
-                title="MISSION"
-                description={missions}
-                coordinate={{ latitude: 44.012735, longitude: 4.876297 }}
-              >
-                {/* <View style={{backgroundColor: "red", padding: 10}}>
-                  <Text>{missions}</Text>
-                </View> */}
-              </Marker>
-            </MapView>
-    </View>
-    );
+        <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
+                <MapView
+                  style={{ flex: 1, display: 'flex', alignItems:'flex-end', justifyContent:'flex-end'}}
+                  initialRegion={{
+                    latitude: currentLatitude,
+                    longitude: currentLongitude,
+                    latitudeDelta: 0.0092,
+                    longitudeDelta: 0.0092,
+                  }}>  
+                  <Marker key={"currentPos"}
+                    pinColor="red"
+                    title="Je suis ici"
+                    description="Ma position"
+                    coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
+                    onPress={toggleOverlay}
+                  />
+              
+                  <Marker
+                    onPress={()=>missionAleatoire()}
+                    pinColor="green"
+                    title="MISSION"
+                    coordinate={{ latitude: 44.012735, longitude: 4.876297 }}
+                  >
+                    <Overlay isVisible={olmission} style={{backgroundColor: "red", padding: 10}}>
+                      <Text>{missions}</Text>
+                    </Overlay>
+                  </Marker>
+                </MapView>
+        </View>
+        );
+
 };
 const styles = StyleSheet.create({
     btnover:{
@@ -143,4 +147,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default trajetparcour;
+export default trajetparcour3;

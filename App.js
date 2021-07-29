@@ -9,6 +9,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import login from './screens/login';
 import parcourchoix from './screens/parcourchoix';
 import trajetparcour from './screens/trajetparcour';
+import trajetparcour2 from './screens/trajetparcour2';
+import trajetparcour3 from './screens/trajetparcour3';
 import mapscreen from './screens/mapscreen';
 import homescreen from './screens/homescreen';
 import signup from './screens/signup';
@@ -63,6 +65,8 @@ export default function App() {
         <Stack.Screen name="login" component={login} />
         <Stack.Screen name="signup" component={signup} />
         <Stack.Screen name="trajet" component={trajetparcour} />
+        <Stack.Screen name="trajet2" component={trajetparcour2} />
+        <Stack.Screen name="trajet3" component={trajetparcour3} />
         <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
       </Stack.Navigator>
   </NavigationContainer>
