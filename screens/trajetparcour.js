@@ -5,6 +5,10 @@ import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { FontAwesome } from '@expo/vector-icons';
+import CountDown from 'react-native-countdown-component';
+
+
+
 
 const trajetparcour = () => {
 const [currentLatitude, setCurrentLatitude] = useState(0);
@@ -129,15 +133,22 @@ return (
             />
 
             <Marker
-                    onPress={()=>handleoverlayclick()}
-                    pinColor="green"
-                    coordinate={{ latitude: 44.012735, longitude: 4.876297 }}
+            onPress={()=>handleoverlayclick()}
+            pinColor="green"
+            coordinate={{ latitude: 44.012735, longitude: 4.876297 }}
             >
-                 <Overlay isVisible={olmission} onBackdropPress={toggleMission}>
-                    <Text>{missions}</Text>
-                </Overlay>
-
-            </Marker>
+          <Overlay isVisible={olmission} onBackdropPress={toggleMission}>
+            <Text>{missions}</Text>
+              <CountDown
+                until={60*10}
+                onFinish={() => alert('temps écoulé ! bravo !')}
+                onPress={() => alert('a toi de jouer !')}
+                timeToShow={['M', 'S']}
+                timeLabels={{m: 'Minutes', s: 'Secondes'}}
+                size={20}
+              />
+          </Overlay>
+        </Marker>
 
             {markerTrajRoute}
             {markerTrajDefis}
@@ -146,7 +157,6 @@ return (
     
     </View>
     )
-
 };
 
 const styles = StyleSheet.create({
