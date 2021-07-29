@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet,Text, View, Image,ScrollView, SafeAreaView } from 'react-native';
+import {StyleSheet,Text, View, Image,ScrollView, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import {Input,Button,} from 'react-native-elements';
 import { RotationGestureHandler } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
@@ -12,7 +12,7 @@ const login = (props) => {
     const [errorsignin, setErrorSignin] = useState([])
 
     let handleSignin = async () => {
-        const user = await fetch('http://192.168.1.95:3000/login', {
+        const user = await fetch('http://192.168.244.167:3000/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: `email=${emailin}&password=${passwordin}`
@@ -36,6 +36,7 @@ const login = (props) => {
     })
     
     return (
+        
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View style={styles.container}>

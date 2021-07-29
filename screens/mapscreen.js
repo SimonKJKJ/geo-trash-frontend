@@ -6,7 +6,6 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { FontAwesome } from '@expo/vector-icons'; 
 const mapscreen = (props) => {
-/////////////////////////////////////////////////////////////////////////////////27 juillet 2021 20h52///////////////////////////////////////////////////  
 ////////////////////////////////////////////////////////////////////////////////pin couleur + au clic///////////////////////////////////////////////////  
   const [pinYellow, setPinYellow] = useState('');
   const [pinBlack, setPinBlack] = useState('');
@@ -24,31 +23,28 @@ const mapscreen = (props) => {
   const [pincolor, setPinColor] = useState('')
   const [visibleInfo,setVisibleInfo] = useState(false);
 ///////////////////////////////////////////////////////////////////////initialisation marqueur lancement appli /////////////////////////////////////////
-
   const [latitudeClic,setLatitudeClic] = useState(0);
   const [longitudeClic,setLongitudeClic] = useState(0);
   const [distance, setDistance] = useState(0);
   const [colorPinOverlayDistance,setColorPinOverlayDistance] = useState("");
   const [coordOverlayDistance,setCoordOverlayDistance] = useState({});
- 
-////////////////////////////////////////////////////////////////////////////initialisation marqueur lancement appli ///////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////initialisation marqueur lancement appli ////////////////////////////////////
   const [markers, setMarkers] = useState([]);
 
   useEffect(()=> {
     async function marker() {
-      const mark = await fetch('http://192.168.1.95:3000/calltrash')
+      const mark = await fetch('http://192.168.244.167:3000/calltrash')
       const markjson = await mark.json();
       console.log("markers", markjson)
       setMarkers(markjson.recuptrash)
     } 
     marker();
   }, [distance,colorPinOverlayDistance,coordOverlayDistance])
-  
 ////////////////////////////////////////////////////////////////////////calcul distance///////////////////////////////////////////////////////////////
 function deg2rad(deg) { 
   return deg * (Math.PI/180)
 }
-//////////////////// Formule de Haversine pour le calcul de la distance entre 2 points////////////////////////////////////////////////////////////
+//////////////////// Formule de Haversine pour le calcul de la distance entre 2 points///////////////////////////////////////////////////////////////
 function getDistance(lat1, lon1, lat2, lon2) {
   var R = 6371;
   var dLat = deg2rad(lat2-lat1);
@@ -65,15 +61,15 @@ function getDistance(lat1, lon1, lat2, lon2) {
   useEffect(() => {
     async function askPermissions() {
       let { status } = await Permissions.askAsync(Permissions.LOCATION);
-      if (status === 'granted') {
-        Location.watchPositionAsync({ distanceInterval: 2 },
-          (location) => {
-            setCurrentLatitude(location.coords.latitude)
-            setCurrentLongitude(location.coords.longitude);
-          }
-        );
+        if (status === 'granted') {
+          Location.watchPositionAsync({ distanceInterval: 2 },
+            (location) => {
+              setCurrentLatitude(location.coords.latitude)
+              setCurrentLongitude(location.coords.longitude);
+            }
+          );
+        }
       }
-    }
     askPermissions();
   }, []);
 ////////////////////////////////////////////////////////////////////////////function add trash click////////////////////////////////////////////////////////////////////
@@ -83,6 +79,10 @@ let trash = (onPress) => {
   console.log("trashlatitude////", onPress.nativeEvent.coordinate.latitude)
   console.log("trashlongitude////", onPress.nativeEvent.coordinate.longitude)
 }
+if(addtrash) {
+  console.log("ajout poubelle possible")
+}
+console.log(addtrash)
 let trashmap = (colorMarker) => {
   setTrashList([...trashlist, {longitude: loctrash.longitude, latitude: loctrash.latitude}])
   setPinColor(colorMarker)
@@ -95,7 +95,7 @@ let trashmark = trashlist.map((trash, i) => {
 })
 ///////////////////////////////////////////////////////////////////////////////////////////////requête controlleur/////////////////////////////////////////////////////////
 let handleaddtrash = async () => {
-  const trashin = await fetch('http://192.168.1.95:3000/addtrash', {
+  const trashin = await fetch('http://192.168.244.167:3000/addtrash', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: `latitude=${loctrash.latitude}&longitude=${loctrash.longitude}&color=${pincolor}`
@@ -103,8 +103,6 @@ let handleaddtrash = async () => {
   const trash = await trashin.json();
   console.log("trashjson////", trash)
 }
-
-
 ////////////////////////////////////////////////////////commandes overlays////////////////////////////////////////////////////////////////////////////    
     const toggleOverlay = () => {
         setVisible(!visible);
@@ -121,18 +119,19 @@ let handleaddtrash = async () => {
 ////////////////// 3- filtre par couleur ////////////////////////////////////////////
 ////////////////// 4- push color copie //////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////A REVOIR/////////////////////////////////////////////
-const getMarkerFromColor = (colormark) => {
-  console.log("colormark", colormark)
-  console.log("markers//", markers)
-  let copie = [];
-  markers.map((mark, i)=> {
-    if(mark.color === colormark) {
-      const xx = [... copie, mark.color]
-      console.log("mark////", xx)
-    }
-  })
-  setMarkers(copie)
-}
+// const getMarkerFromColor = (colormark) => {
+//   console.log("colormark", colormark)
+//   console.log("markers//", markers)
+//   let copie = [];
+//   markers.map((mark, i)=> {
+//     if(mark.color === colormark) {
+//       const xx = [... copie, mark.color]
+//       console.log("mark////", xx)
+//     }
+//   })
+//   setMarkers(copie)
+//   console.log("marker///", markers)
+// }
 ////////////////////////////////////////////////////////////////////////////////////.map pour marqueurs lancement application///////////////////////////////////////////// 
 /////////////////////////////////////////////////////////////////////////INTEGRATION MAP//////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////Fonction pour OVERLAY DISTANCE trash////////////////////////////////////////////////////////////
@@ -150,13 +149,12 @@ const getMarkerFromColor = (colormark) => {
       console.log("LONGITUDE CLIC", longitudeClic)
       setDistance(getDistance(currentLatitude, currentLongitude,latitudeClic,longitudeClic))
       console.log("DISTANCE", distance)
-      
     }
-
+//////////////////////////////////////////////////////////////////////////////////////////.Map ajout poubelles///////////////////////////////////////////////
     let trashstart = markers.map((mark,i) => {   
-      return <Marker key={i} pinColor= {mark.color} onPress={()=>handleClicTrash(mark.latitude,mark.longitude,mark.color)} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>   
+    return <Marker key={i} pinColor= {mark.color} onPress={()=>handleClicTrash(mark.latitude,mark.longitude,mark.color)} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>   
     })
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
 <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
   <MapView style={{ flex: 1, display: 'flex', alignItems:'flex-end', justifyContent:'flex-end'}}
@@ -174,18 +172,18 @@ const getMarkerFromColor = (colormark) => {
       title="Je suis ici"
       description="Ma position"
       coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}/>
-      {/* ///////////////////////////////////////////////////////Marqueur test ////////////////////////////////////////////////////////////////// */}
+{/* ///////////////////////////////////////////////////////Marqueur test ////////////////////////////////////////////////////////////////////////////// */}
       <Marker pinColor="green"
               coordinate={{latitude: 43.29, longitude: 5.37}}
               onPress={toggleInfo}
               />
-      {/* ///////////////////////////////////////////////////////Fin Marqueur test/////////////////////////////////////////////////////////////////////////// */}
+{/* ///////////////////////////////////////////////////////Fin Marqueur test/////////////////////////////////////////////////////////////////////////// */}
   </MapView>
     <View style={{flexDirection:'row', justifyContent:'space-around'}}>
       <FontAwesome name="plus-square" size={30} color="#2c6e49" onPress={toggleOverlay} />
       <FontAwesome name="filter" size={30} color="#2c6e49" onPress={changestateover}/>
     </View>  
-{/* /////////////////////////////////////////////////////////////////OVERLAY FILTRES////////////////////////////////////////////////////////////////////////////////////*/}
+{/* /////////////////////////////////////////////////////////////////OVERLAY FILTRES////////////////////////////////////////////////////////////////////*/}
   <Overlay overlayStyle={styles.overlay} isVisible={overfilter} onBackdropPress={changestateover}>
     <Text style={{fontSize: 24}}>Que cherches tu ?</Text>
     <TouchableOpacity onPress={()=>getMarkerFromColor("#ff0")}>
@@ -202,7 +200,7 @@ const getMarkerFromColor = (colormark) => {
     <Text style={styles.textover}>verre</Text>
     <Button  buttonStyle={styles.btnover} title='choisir'/>
   </Overlay>
-{/* ////////////////////////////////////////////////////////////OVERLAY AJOUT POUBELLES///////////////////////////////////////////////////////////////////////////////// */}
+{/* ////////////////////////////////////////////////////////////OVERLAY AJOUT POUBELLES///////////////////////////////////////////////////////////////// */}
   <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay}>
       <Text style={styles.text}>Veux tu ajouter un nouveau bac ?</Text>
     
@@ -244,11 +242,9 @@ const getMarkerFromColor = (colormark) => {
               coordinate={coordOverlayDistance}
               onPress={toggleInfo}
               />
-              
             </MapView>
             <Button containerStyle={{width: "80%", marginTop:10, marginBottom: 100}} 
               buttonStyle={styles.button}
-               
               onPress={() => setVisibleInfo(false)}
               title="Retour"
             />
@@ -270,7 +266,6 @@ const styles = StyleSheet.create({
     textover:{
       textAlign: 'center'
     },
-
     btn:{
       flex:1,
       flexDirection: 'row',
@@ -312,7 +307,6 @@ const styles = StyleSheet.create({
       borderRadius: 15,
       backgroundColor:'#2c6e49',
   }
-
 })
 
 export default mapscreen;

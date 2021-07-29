@@ -6,13 +6,12 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { FontAwesome } from '@expo/vector-icons';
 
-const trajetparcour = () => {
+const trajetparcour2 = () => {
     const [visible, setVisible] = useState(false);
     const [currentLatitude, setCurrentLatitude] = useState(0);
     const [currentLongitude, setCurrentLongitude] = useState(0);
     const [visibleInfo,setVisibleInfo] = useState(false);
     const [missions, setMissions] = useState("");
-
 
     const toggleInfo =() => {
         setVisibleInfo(!visible)
@@ -46,9 +45,9 @@ let random = Math.floor(Math.random()*newmission.length);
 setMissions(newmission[random])
 console.log("nm", newmission.length)
 console.log("nmrandom", newmission[random])
-}
 
-    return (
+}
+return (
     <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
             <MapView
               style={{ flex: 1, display: 'flex', alignItems:'flex-end', justifyContent:'flex-end'}}
@@ -143,4 +142,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default trajetparcour;
+export default trajetparcour2;
