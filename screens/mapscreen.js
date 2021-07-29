@@ -83,6 +83,7 @@ if(addtrash) {
   console.log("ajout poubelle possible")
 }
 console.log(addtrash)
+
 let trashmap = (colorMarker) => {
   setTrashList([...trashlist, {longitude: loctrash.longitude, latitude: loctrash.latitude}])
   setPinColor(colorMarker)

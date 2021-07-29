@@ -117,6 +117,19 @@ return (
               />
               {markerTrajRoute}
               {markerTrajDefis}
+
+              <Marker 
+                pinColor="#FF0"
+                title="start"
+                description="Ma position"
+                coordinate={{ latitude: 43.261262, longitude: 5.379513 }}
+              />
+              <Marker 
+                pinColor="#FF0"
+                title="Arrival"
+                description="Ma position"
+                coordinate={{ latitude: 43.257704, longitude: 5.376038 }}
+              />
           
               <Marker
                 onPress={()=>handleoverlayclick()}
@@ -128,7 +141,7 @@ return (
                 </Overlay>
 
               </Marker>
-              
+
             </MapView>
     </View>
     );

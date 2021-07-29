@@ -13,8 +13,8 @@ const [missions, setMissions] = useState("");
 ///////////////////////////////////////VARIABLES PARCOURS 1//////////////////////////////////////
 const coordDepart= {lat : 49.295048,long:5.375826};
 const coodArrival={lat:43.294295,long:5.374474};
-const coordTrip=[{lat : 49.295088,long:5.375998},
-    {lat : 49.294888,long:5.376154},
+const coordTrip=[{lat : 43.295088,long:5.375998},
+    {lat : 43.294888,long:5.376154},
     {lat : 43.294482,long:5.376331},
     {lat : 43.294336,long:5.376412},
     {lat : 43.294142,long:5.376482},
@@ -36,7 +36,7 @@ const coordTrip=[{lat : 49.295088,long:5.375998},
     {lat:43.294228,long:5.374823},
     {lat:43.294325,long:5.374498}
 ];
-const coordDefi=[{lat : 49.294627,long:5.376270},
+const coordDefi=[{lat : 43.294627,long:5.376270},
     {lat : 43.293720,long:5.376880},
     {lat : 43.294303,long:5.376880},
     {lat : 43.294742,long:5.376853}
@@ -102,10 +102,10 @@ return (
         <MapView
             style={{ flex: 1, display: 'flex', alignItems:'flex-end', justifyContent:'flex-end'}}
             initialRegion={{
-            latitude: 43.293936,
-            longitude: 5.375907,
-            latitudeDelta: 0.0092,
-            longitudeDelta: 0.0092,
+            latitude: 43.294493,
+            longitude: 5.375859,
+            latitudeDelta: 0.0032,
+            longitudeDelta: 0.0032,
         }}>
             <Marker key={"currentPos"}
                         pinColor="red"
@@ -114,10 +114,20 @@ return (
                         coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
                         onPress={toggleOverlay}
             />
-             <Marker pinColor="red"
-                    title="Départ"
-                    coordinate={{latitude : 49.295048,longitude :5.375826}}
+
+            <Marker 
+                pinColor="#FF0"
+                title="start"
+                description="Ma position"
+                coordinate={{ latitude: 43.295048, longitude: 5.375826 }}
             />
+            <Marker 
+                pinColor="#FF0"
+                title="Arrival"
+                description="Ma position"
+                coordinate={{ latitude: 43.294295, longitude: 5.374474 }}
+            />
+
             <Marker
                     onPress={()=>handleoverlayclick()}
                     pinColor="green"

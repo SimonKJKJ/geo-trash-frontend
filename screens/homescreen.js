@@ -22,9 +22,9 @@ useEffect(()=> {
                     <Button   buttonStyle={styles.button} containerStyle={{width: "80%", marginTop:10, marginBottom: 100}} title="Quizz" onPress={()=> console.log("click ok")}/>
                     </View>
                     <Text style={styles.titles2}>On te parle un peu de nous ?</Text>
-                    <Text style={styles.para}>Grâce à la communauté nous avons sauvé 13 dauphins !</Text>
-                    <Text style={styles.para}>150 poubelles ont été ajoutées le mois dernier</Text>
-                    <Text style={styles.para}>302 parcours udiques ont été suivis par les parents et leurs enfants !</Text>
+                    <Text style={styles.numbers}>13 dauphins</Text><Text style={styles.para}>ont été sauvé grâce à la communauté</Text>
+                    <Text style={styles.numbers}>150 poubelles</Text><Text style={styles.para}> ont été ajoutées le mois dernier</Text>
+                    <Text style={styles.numbers}>302 parcours</Text><Text style={styles.para}> ludiques ont été parcouru par les parents et leurs enfants !</Text>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -36,9 +36,14 @@ const styles = StyleSheet.create({
         fontSize: 26, 
         marginTop: -65
     },
+    numbers:{
+        fontSize: 16, 
+        marginTop: 30,
+        fontWeight:"bold"
+    },
     para:{
         fontSize: 16, 
-        marginTop: 30
+        
     },
     titles:{
         fontSize: 26, 
@@ -62,7 +67,6 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         alignItems: 'flex-start',
-        marginTop: 90,
         marginLeft: 15,
         backgroundColor: '#fff'
     }
