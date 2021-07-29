@@ -23,7 +23,7 @@ const login = (props) => {
 
         if(userin.result === false){
             setErrorSignin(userin.error)
-            return (props.navigation.navigate('login')) 
+            return (props.navigation.navigate('BottomNavigator', {screen: 'home'})) ////////////////////remettre return (props.navigation.navigate('login')) /////////////
         } else {
             props.sendfirstname(userin) 
             console.log("userinfn///",props.sendfirstname)

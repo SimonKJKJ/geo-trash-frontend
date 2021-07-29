@@ -1,31 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View , Image, TouchableOpacity } from 'react-native';
-import { Overlay, Button} from 'react-native-elements';
-import MapView, { Marker, Callout } from 'react-native-maps';
+import { Overlay} from 'react-native-elements';
+import MapView, { Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-import { FontAwesome } from '@expo/vector-icons';
+
 
 const trajetparcour3 = () => {
-    const [visible, setVisible] = useState(false);
     const [currentLatitude, setCurrentLatitude] = useState(0);
     const [currentLongitude, setCurrentLongitude] = useState(0);
-    const [visibleInfo,setVisibleInfo] = useState(false);
     const [missions, setMissions] = useState("");
     const [olmission, setOlmission] = useState(false);
 
-
     const toggleMission = () => {
-        setOlmission(!visible);
+        setOlmission(!olmission);
       };   
-    const toggleInfo =() => {
-        setVisibleInfo(!visible)
-      }
-    const toggleOverlay = () => {
-        setVisible(!visible);
-      };
     
-
       useEffect(() => {
         async function askPermissions() {
           let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -46,12 +36,16 @@ const trajetparcour3 = () => {
                     "demande à tes parents de t'aider à organiser une sortie avec tes amis pour ramasser des déchets dans la nature !"];
     let newmission = [...mission];
     function missionAleatoire() {
-        toggleMission()
         let random = Math.floor(Math.random()*newmission.length);
         setMissions(newmission[random])
     console.log("nm", newmission.length)
     console.log("nmrandom", newmission[random])
     }
+    let handleoverlayclick = () => {
+        missionAleatoire();
+        toggleMission()
+    }
+    console.log("etat olmissions", olmission)
     return (
         <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
                 <MapView
@@ -67,16 +61,14 @@ const trajetparcour3 = () => {
                     title="Je suis ici"
                     description="Ma position"
                     coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
-                    onPress={toggleOverlay}
                   />
               
                   <Marker
-                    onPress={()=>missionAleatoire()}
+                    onPress={()=>handleoverlayclick()}
                     pinColor="green"
-                    title="MISSION"
                     coordinate={{ latitude: 44.012735, longitude: 4.876297 }}
                   >
-                    <Overlay isVisible={olmission} style={{backgroundColor: "red", padding: 10}}>
+                    <Overlay isVisible={olmission} onBackdropPress={toggleMission} style={{backgroundColor: "red", padding: 10}}>
                       <Text>{missions}</Text>
                     </Overlay>
                   </Marker>

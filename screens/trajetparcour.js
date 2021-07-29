@@ -7,20 +7,14 @@ import * as Permissions from 'expo-permissions';
 import { FontAwesome } from '@expo/vector-icons';
 
 const trajetparcour = () => {
-    const [visible, setVisible] = useState(false);
     const [currentLatitude, setCurrentLatitude] = useState(0);
     const [currentLongitude, setCurrentLongitude] = useState(0);
-    const [visibleInfo,setVisibleInfo] = useState(false);
     const [missions, setMissions] = useState("");
+    const [olmission, setOlmission] = useState(false);
 
-
-    const toggleInfo =() => {
-        setVisibleInfo(!visible)
-      }
-
-    const toggleOverlay = () => {
-        setVisible(!visible);
-      };
+    const toggleMission = () => {
+      setOlmission(!olmission);
+    };  
 
       useEffect(() => {
         async function askPermissions() {
@@ -47,40 +41,42 @@ setMissions(newmission[random])
 console.log("nm", newmission.length)
 console.log("nmrandom", newmission[random])
 }
-
-    return (
-    <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
-            <MapView
-              style={{ flex: 1, display: 'flex', alignItems:'flex-end', justifyContent:'flex-end'}}
-              initialRegion={{
-                latitude: currentLatitude,
-                longitude: currentLongitude,
-                latitudeDelta: 0.0092,
-                longitudeDelta: 0.0092,
-              }}>  
-              <Marker key={"currentPos"}
-                pinColor="red"
-                title="Je suis ici"
-                description="Ma position"
-                coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
-                onPress={toggleOverlay}
-              />
-          
-              <Marker
-                onPress={()=>missionAleatoire()}
-                pinColor="green"
-                title="MISSION"
-                description={missions}
-                coordinate={{ latitude: 44.012735, longitude: 4.876297 }}
-              >
-                {/* <View style={{backgroundColor: "red", padding: 10}}>
-                  <Text>{missions}</Text>
-                </View> */}
-              </Marker>
-            </MapView>
-    </View>
-    );
+let handleoverlayclick = () => {
+  missionAleatoire();
+  toggleMission()
+}
+return (
+  <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
+          <MapView
+            style={{ flex: 1, display: 'flex', alignItems:'flex-end', justifyContent:'flex-end'}}
+            initialRegion={{
+              latitude: currentLatitude,
+              longitude: currentLongitude,
+              latitudeDelta: 0.0092,
+              longitudeDelta: 0.0092,
+            }}>  
+            <Marker key={"currentPos"}
+              pinColor="red"
+              title="Je suis ici"
+              description="Ma position"
+              coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
+            />
+        
+            <Marker
+              onPress={()=>handleoverlayclick()}
+              pinColor="green"
+              coordinate={{ latitude: 44.012735, longitude: 4.876297 }}
+            >
+              <Overlay isVisible={olmission} onBackdropPress={toggleMission} style={{backgroundColor: "red", padding: 10}}>
+                <Text>{missions}</Text>
+                {/* <Button title="ok je fonce" onPress={toggleMission}/> */}
+              </Overlay>
+            </Marker>
+          </MapView>
+  </View>
+  );
 };
+
 const styles = StyleSheet.create({
     btnover:{
       backgroundColor: '#2c6e49',
