@@ -55,14 +55,11 @@ const trajetparcour3 = () => {
     const DefiName =["Recherche","L'eau du lac","L'archéologue", "Un tour au Zoo"]
 
     var markerTrajRoute = coordTrip.map((route, i) => {
-      return <Marker key={i} pinColor="green" coordinate={{ latitude: route.lat, longitude: route.long }}
+      return <Marker key={i} pinColor="green" image={require('./pngegg.png')} coordinate={{ latitude: route.lat, longitude: route.long }}
       />
     });
   
-    var markerTrajDefis = coordDefi.map((defi, i) => {
-        return <Marker key={i} pinColor="blue" coordinate={{ latitude: defi.lat, longitude: defi.long }}
-        />
-    });
+
 
     const toggleMission = () => {
         setOlmission(!olmission);
@@ -98,6 +95,30 @@ const trajetparcour3 = () => {
         toggleMission()
     }
     console.log("etat olmissions", olmission)
+    var markerTrajDefis = coordDefi.map((defi, i) => {
+        return (
+          <Marker key={i} 
+            pinColor="blue" 
+            image={require('./missions1.png')}
+            coordinate={{ latitude: defi.lat, longitude: defi.long }}
+            onPress={()=>handleoverlayclick()}
+          >
+          <Overlay isVisible={olmission} onBackdropPress={toggleMission}>
+              <Text>{missions}</Text>
+              <CountDown
+            until={60*10}
+            onFinish={() => alert('temps écoulé ! bravo !')}
+            onPress={() => alert('a toi de jouer !')}
+            timeToShow={['M', 'S']}
+            timeLabels={{m: 'Minutes', s: 'Secondes'}}
+            size={20}
+          />
+          </Overlay>
+          </Marker>
+            )
+    });
+
+
     return (
         <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
                 <MapView
@@ -122,38 +143,27 @@ const trajetparcour3 = () => {
                     pinColor="#FF0"
                     title="start"
                     description="Ma position"
-                    coordinate={{ latitude: 43.305112, longitude: 5.394679 }}
+                    image={require('./pngegg(3).png')}
+                    coordinate={{ latitude: coordDepart.lat, longitude: coordDepart.long }}
                   />
+                  {console.log("coordinate start", coordDepart.lat)}
                   <Marker 
-                    pinColor="#FF0"
+                    pinColor="#FF00ff"
                     title="Arrival"
                     description="Ma position"
-                    coordinate={{ latitude: 43.305195, longitude: 5.397192 }}
+                    image={require('./arrival.png')}
+                    coordinate={{ latitude: coodArrival.lat, longitude: coodArrival.long }}
                   />
-              
-                  <Marker
-                    onPress={()=>handleoverlayclick()}
-                    pinColor="green"
-                    coordinate={{ latitude: 44.012735, longitude: 4.876297 }}
-                  >
-                    <Overlay isVisible={olmission} onBackdropPress={toggleMission} style={{backgroundColor: "red", padding: 10}}>
-                      <Text>{missions}</Text>
-                      <CountDown
-                        until={60*10+30}
-                        onFinish={() => alert('temps écoulé ! bravo !')}
-                        onPress={() => alert('a toi de jouer !')}
-                        timeToShow={['M', 'S']}
-                        timeLabels={{m: 'Minutes', s: 'Secondes'}}
-                        size={20}
-                        />
-                    </Overlay>
-                  </Marker>
                 </MapView>
         </View>
         );
 
 };
 const styles = StyleSheet.create({
+    marker:{
+        width: 50,
+        height: 50,
+    },
     btnover:{
       backgroundColor: '#2c6e49',
       borderRadius: 15,

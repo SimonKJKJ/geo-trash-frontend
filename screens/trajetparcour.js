@@ -14,6 +14,8 @@ const trajetparcour = () => {
 const [currentLatitude, setCurrentLatitude] = useState(0);
 const [currentLongitude, setCurrentLongitude] = useState(0);
 const [missions, setMissions] = useState("");
+const [olmission, setOlmission] = useState(false);
+
 ///////////////////////////////////////VARIABLES PARCOURS 1//////////////////////////////////////
 const coordDepart= {lat : 49.295048,long:5.375826};
 const coodArrival={lat:43.294295,long:5.374474};
@@ -52,20 +54,9 @@ var markerTrajRoute = coordTrip.map((route, i) => {
     />
 });
 
-var markerTrajDefis = coordDefi.map((defi, i) => {
-    return <Marker key={i} pinColor="blue" coordinate={{ latitude: defi.lat, longitude: defi.long }}
-    />
-});
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-const toggleInfo =() => {
-    setVisibleInfo(!visible)
-    }
-
-const toggleOverlay = () => {
-    setVisible(!visible);
-    };
-const [olmission, setOlmission] = useState(false);
 
 const toggleMission = () => {
     setOlmission(!olmission);
@@ -101,6 +92,28 @@ let handleoverlayclick = () => {
     toggleMission()
 }
 
+var markerTrajDefis = coordDefi.map((defi, i) => {
+  return (
+    <Marker key={i} 
+    pinColor="blue" 
+    coordinate={{ latitude: defi.lat, longitude: defi.long }}
+    onPress={()=>handleoverlayclick()}
+  >
+    <Overlay isVisible={olmission} onBackdropPress={toggleMission}>
+      <Text>{missions}</Text>
+      <CountDown
+        until={60*10}
+        onFinish={() => alert('temps écoulé ! bravo !')}
+        onPress={() => alert('a toi de jouer !')}
+        timeToShow={['M', 'S']}
+        timeLabels={{m: 'Minutes', s: 'Secondes'}}
+        size={20}
+      />
+  </Overlay>
+  </Marker>
+    )
+});
+
 return (
     <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
         <MapView
@@ -116,9 +129,9 @@ return (
                         title="Je suis ici"
                         description="Ma position"
                         coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
-                        onPress={toggleOverlay}
             />
-
+          {markerTrajRoute}
+          {markerTrajDefis}
             <Marker 
                 pinColor="#FF0"
                 title="start"
@@ -126,33 +139,11 @@ return (
                 coordinate={{ latitude: 43.295048, longitude: 5.375826 }}
             />
             <Marker 
-                pinColor="#FF0"
+                pinColor="#FF00ff"
                 title="Arrival"
                 description="Ma position"
                 coordinate={{ latitude: 43.294295, longitude: 5.374474 }}
             />
-
-            <Marker
-            onPress={()=>handleoverlayclick()}
-            pinColor="green"
-            coordinate={{ latitude: 44.012735, longitude: 4.876297 }}
-            >
-          <Overlay isVisible={olmission} onBackdropPress={toggleMission}>
-            <Text>{missions}</Text>
-              <CountDown
-                until={60*10}
-                onFinish={() => alert('temps écoulé ! bravo !')}
-                onPress={() => alert('a toi de jouer !')}
-                timeToShow={['M', 'S']}
-                timeLabels={{m: 'Minutes', s: 'Secondes'}}
-                size={20}
-              />
-          </Overlay>
-        </Marker>
-
-            {markerTrajRoute}
-            {markerTrajDefis}
-
         </MapView>
     
     </View>

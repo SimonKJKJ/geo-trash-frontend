@@ -8,7 +8,7 @@ import CountDown from 'react-native-countdown-component';
 
 
 const trajetparcour2 = () => {
-    const [visible, setVisible] = useState(false);
+    
     const [currentLatitude, setCurrentLatitude] = useState(0);
     const [currentLongitude, setCurrentLongitude] = useState(0);
     const [missions, setMissions] = useState("");
@@ -18,8 +18,6 @@ const trajetparcour2 = () => {
     const routeName ="LES FONDS MARINS";
     const timeRoute ="2h15";
     const distanceRoute="2,7km";
-    const coordDepart= {lat : 43.261262,long:5.379513};
-    const coodArrival={lat:43.257704,long:5.376038};
     const coordTrip=[{lat : 43.261114,long:5.379134},
         {lat : 43.260690,long:5.379391},
         {lat : 43.260325,long:5.379635},
@@ -53,20 +51,7 @@ const trajetparcour2 = () => {
         return <Marker key={i} pinColor="green" coordinate={{ latitude: route.lat, longitude: route.long }}
         />
     });
-    
-    var markerTrajDefis = coordDefi.map((defi, i) => {
-        return <Marker key={i} pinColor="blue" coordinate={{ latitude: defi.lat, longitude: defi.long }}
-        />
-    });
 
-
-    const toggleInfo =() => {
-        setVisibleInfo(!visible)
-      }
-
-    const toggleOverlay = () => {
-        setVisible(!visible);
-      };
     const toggleMission = () => {
         setOlmission(!olmission);
       };  
@@ -85,7 +70,7 @@ const trajetparcour2 = () => {
         }
         askPermissions();
       }, []);
-
+///////////////////////////////////////////////////////////generateur missions aléatoires sur marker mission/////////////////////////////////////////////////////////////////
       let mission = ["cours le plus vite possible vers les bac de tri les plus proche ! p.s: fais attention aux voitures",
       "ramasse le plus vite possible 10 déchets autour de toi ! depeche toi le chrono va démarrer !",
       "demande à tes parents de t'aider à organiser une sortie avec tes amis pour ramasser des déchets dans la nature !"];
@@ -101,6 +86,28 @@ let handleoverlayclick = () => {
     missionAleatoire();
     toggleMission()
 }
+var markerTrajDefis = coordDefi.map((defi, i) => {
+  return (
+  <Marker key={i} 
+  pinColor="blue" 
+  coordinate={{ latitude: defi.lat, longitude: defi.long }}
+  onPress={()=>handleoverlayclick()}
+>
+  <Overlay isVisible={olmission} onBackdropPress={toggleMission}>
+    <Text>{missions}</Text>
+    <CountDown
+  until={60*10}
+  onFinish={() => alert('temps écoulé ! bravo !')}
+  onPress={() => alert('a toi de jouer !')}
+  timeToShow={['M', 'S']}
+  timeLabels={{m: 'Minutes', s: 'Secondes'}}
+  size={20}
+/>
+</Overlay>
+</Marker>
+  )
+});
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 return (
     <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
             <MapView
@@ -127,31 +134,11 @@ return (
                 coordinate={{ latitude: 43.261262, longitude: 5.379513 }}
               />
               <Marker 
-                pinColor="#FF0"
+                pinColor="#ff00ff"
                 title="Arrival"
                 description="Ma position"
                 coordinate={{ latitude: 43.257704, longitude: 5.376038 }}
               />
-          
-              <Marker
-                onPress={()=>handleoverlayclick()}
-                pinColor="green"
-                coordinate={{ latitude: 44.012735, longitude: 4.876297 }}
-              >
-                <Overlay isVisible={olmission} onBackdropPress={toggleMission} style={{backgroundColor: "red", padding: 10}}>
-                  <Text>{missions}</Text>
-                  <CountDown
-                until={60*5+30}
-                onFinish={() => alert('temps écoulé ! bravo !')}
-                onPress={() => alert('a toi de jouer !')}
-                timeToShow={['M', 'S']}
-                timeLabels={{m: 'Minutes', s: 'Secondes'}}
-                size={20}
-              />
-                </Overlay>
-
-              </Marker>
-
             </MapView>
     </View>
     );
