@@ -72,8 +72,7 @@ async function askPermissions() {
         setCurrentLongitude(location.coords.longitude);
         }
     );
-    }
-}
+    }}
 askPermissions();
 }, []);
 
@@ -127,18 +126,21 @@ return (
             longitudeDelta: 0.0032,
         }}>
             <Marker key={"currentPos"}
-                        pinColor="red"
-                        title="Je suis ici"
-                        description="Ma position"
-                        coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
+                pinColor="red"
+                title="Je suis ici"
+                description="Ma position"
+                coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
             />
-          {markerTrajRoute}
-          {markerTrajDefis}
+
+            {markerTrajRoute}
+            {markerTrajDefis}
+
             <Marker 
                 pinColor="#FF0"
                 title="start"
                 image={require('./start150.png')}
                 description="Ma position"
+                image={require('./pngegg(3).png')}
                 coordinate={{ latitude: 43.295048, longitude: 5.375826 }}
             />
             <Marker 
@@ -146,6 +148,7 @@ return (
                 title="Arrival"
                 image={require('./flag150.png')}
                 description="Ma position"
+                image={require('./arrival.png')}
                 coordinate={{ latitude: 43.294295, longitude: 5.374474 }}
             />
         </MapView>

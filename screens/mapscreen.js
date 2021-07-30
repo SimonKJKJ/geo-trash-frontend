@@ -157,14 +157,7 @@ let handleaddtrash = async () => {
       setLongitudeClic(markerLong)
       setColorPinOverlayDistance(colorpin)
       setCoordOverlayDistance({latitude: latitudeClic, longitude: longitudeClic})
-      console.log("MARKER LAT", markerLat)
-      console.log("MARKER LONG", markerLong)
-      console.log("COLORPIN", colorpin)
-      console.log("COLORPIN OVERLAY DISTANCE", colorPinOverlayDistance)
-      console.log("LATITUDE CLIC", latitudeClic)
-      console.log("LONGITUDE CLIC", longitudeClic)
       setDistance(getDistance(currentLatitude, currentLongitude,latitudeClic,longitudeClic))
-      console.log("DISTANCE", distance)
     }
 //////////////////////////////////////////////////////////////////////////////////////////.Map ajout poubelles///////////////////////////////////////////////
     let trashstart = markers.map((mark,i) => {   
@@ -190,9 +183,9 @@ let handleaddtrash = async () => {
       coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}/>
 {/* ///////////////////////////////////////////////////////Marqueur test ////////////////////////////////////////////////////////////////////////////// */}
       <Marker pinColor="green"
-              coordinate={{latitude: 43.29, longitude: 5.37}}
-              onPress={toggleInfo}
-              />
+        coordinate={{latitude: 43.29, longitude: 5.37}}
+        onPress={toggleInfo}
+        />
 {/* ///////////////////////////////////////////////////////Fin Marqueur test/////////////////////////////////////////////////////////////////////////// */}
   </MapView>
     <View style={{flexDirection:'row', justifyContent:'space-around'}}>
@@ -218,25 +211,25 @@ let handleaddtrash = async () => {
   </Overlay>
 {/* ////////////////////////////////////////////////////////////OVERLAY AJOUT POUBELLES///////////////////////////////////////////////////////////////// */}
   <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay}>
-      <Text style={styles.text}>tu as trouver un nouveau bac ?</Text>
+        <Text style={styles.text}>Tu as trouver un nouveau bac ?</Text>
     
         <TouchableOpacity onPress={() => trashmap('#ff0', require('./papiers.png'))}> 
           <Image source={require('./pin-jaune.png')}/>
         </TouchableOpacity>
+
         <Text>Papier, plastique, carton</Text>
         <TouchableOpacity onPress={() => trashmap('#d68c45', require('./poubelle.png'))}>
           <Image source={require('./pin-noir.png')}/>
         </TouchableOpacity>
+
         <Text style={styles.textover}>Tout venant</Text>
         <TouchableOpacity onPress={() => trashmap('#00ff00', require('./verre.png'))}>
           <Image source={require('./pin-vert.png')}/>
         </TouchableOpacity>
+
         <Text>Verre</Text>
-        {console.log("numberyellow",pinYellow)}
-        {console.log("numberblack",pinBlack)}
-        {console.log("numbergreen",pinGreen)}
-    
-    <Button buttonStyle={styles.btnover} title="Valider"/>
+
+        <Button buttonStyle={styles.btnover} title="Valider"/>
   </Overlay>
   <Overlay overlayStyle={styles.overl} isVisible={visibleInfo} onBackdropPress={toggleInfo}>
             <Text style={styles.text}>
@@ -261,12 +254,13 @@ let handleaddtrash = async () => {
               coordinate={coordOverlayDistance}
               onPress={toggleInfo}
               />
-            </MapView>
-            <Button containerStyle={{width: "80%", marginTop:10, marginBottom: 100}} 
-              buttonStyle={styles.button}
-              onPress={() => setVisibleInfo(false)}
-              title="Retour"
-            />
+        </MapView>
+
+        <Button containerStyle={{width: "80%", marginTop:20, marginBottom: 10}} 
+          buttonStyle={styles.button}
+          onPress={() => setVisibleInfo(false)}
+          title="Retour"
+        />
         </Overlay>
 </View>
 )};
@@ -284,12 +278,14 @@ const styles = StyleSheet.create({
     btnover:{
       backgroundColor: '#2c6e49',
       borderRadius: 15,
-      marginTop: 15
+      margin: 15,
+      width:"80%"
     },
     overlay:{
       flexDirection:'column',
       alignItems:'center',
-      backgroundColor: '#fff'
+      backgroundColor: '#fff',
+      borderRadius:15
     },
     textover:{
       textAlign: 'center'
@@ -310,7 +306,9 @@ const styles = StyleSheet.create({
     text:{
       fontWeight:'bold',
       fontSize:20,
-      margin:30,
+      margin:10,
+      marginBottom:20,
+      fontFamily: 'Poppins',
     },
     bloc:{
       display:'flex',

@@ -90,11 +90,15 @@ const trajetparcour3 = (props) => {
     console.log("nm", newmission.length)
     console.log("nmrandom", newmission[random])
     }
+    
     let handleoverlayclick = () => {
         missionAleatoire();
-        toggleMission()
+        toggleMission();
+        
     }
     console.log("etat olmissions", olmission)
+
+
     var markerTrajDefis = coordDefi.map((defi, i) => {
         return (
           <Marker key={i} 
@@ -103,21 +107,20 @@ const trajetparcour3 = (props) => {
             coordinate={{ latitude: defi.lat, longitude: defi.long }}
             onPress={()=>handleoverlayclick()}
           >
-          <Overlay isVisible={olmission} onBackdropPress={toggleMission}>
-              <Text>{missions}</Text>
-              <CountDown
-            until={60*10}
-            onFinish={() => alert('temps écoulé ! bravo !')}
-            onPress={() => alert('a toi de jouer !')}
-            timeToShow={['M', 'S']}
-            timeLabels={{m: 'Minutes', s: 'Secondes'}}
-            size={20}
-          />
-          </Overlay>
+              <Overlay isVisible={olmission} onBackdropPress={toggleMission}>
+                  <Text>{missions}</Text>
+                  <CountDown
+                    until={60*10}
+                    onFinish={() => alert('temps écoulé ! bravo !')}
+                    onPress={() => alert('a toi de jouer !')}
+                    timeToShow={['M', 'S']}
+                    timeLabels={{m: 'Minutes', s: 'Secondes'}}
+                    size={20}
+                  />
+              </Overlay>
           </Marker>
-            )
+        )
     });
-
 
     return (
         <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
@@ -128,32 +131,32 @@ const trajetparcour3 = (props) => {
                     longitude: 5.395998,
                     latitudeDelta: 0.0032,
                     longitudeDelta: 0.0032,
-                  }}>  
-                  <Marker key={"currentPos"}
+                }}>  
+                <Marker key={"currentPos"}
                     pinColor="red"
                     title="Je suis ici"
                     description="Ma position"
                     coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
-                  />
+                />
 
-                  {markerTrajRoute}
-                  {markerTrajDefis}
+                {markerTrajRoute}
+                {markerTrajDefis}
 
-                  <Marker 
+                <Marker 
                     pinColor="#FF0"
                     title="start"
                     description="Ma position"
                     image={require('./start150.png')}
                     coordinate={{ latitude: coordDepart.lat, longitude: coordDepart.long }}
-                  />
+                />
                   {console.log("coordinate start", coordDepart.lat)}
-                  <Marker 
+                <Marker 
                     pinColor="#FF00ff"
                     title="Arrival"
                     description="Ma position"
                     image={require('./flag150.png')}
                     coordinate={{ latitude: coodArrival.lat, longitude: coodArrival.long }}
-                  />
+                />
                 </MapView>
                 <Button title="back" onPress={()=>props.navigation.navigate('BottomNavigator', {screen: 'home'})}/>
 

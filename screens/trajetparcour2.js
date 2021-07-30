@@ -54,6 +54,7 @@ const trajetparcour2 = (props) => {
     console.log("olmission state", olmission)
     const toggleMission = () => {
         setOlmission(!olmission);
+        
       };  
 
       useEffect(() => {
@@ -140,6 +141,7 @@ return (
                 title="Arrival"
                 image={require('./flag150.png')}
                 description="Ma position"
+                image={require('./arrival.png')}
                 coordinate={{ latitude: 43.257704, longitude: 5.376038 }}
               />
             </MapView>
