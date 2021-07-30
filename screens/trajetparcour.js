@@ -8,8 +8,6 @@ import { FontAwesome } from '@expo/vector-icons';
 import CountDown from 'react-native-countdown-component';
 
 
-
-
 const trajetparcour = () => {
 const [currentLatitude, setCurrentLatitude] = useState(0);
 const [currentLongitude, setCurrentLongitude] = useState(0);
