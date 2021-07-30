@@ -271,7 +271,8 @@ const styles = StyleSheet.create({
     overlay:{
       flexDirection:'column',
       alignItems:'center',
-      backgroundColor: '#fff'
+      backgroundColor: '#fff',
+      borderRadius:15
     },
     textover:{
       textAlign: 'center'
@@ -311,7 +312,8 @@ const styles = StyleSheet.create({
       width : 300,
       margin:10,
       alignItems:'center',
-      justifyContent:'center'
+      justifyContent:'center',
+      borderRadius:25
     },
     button:{
       borderRadius: 15,
