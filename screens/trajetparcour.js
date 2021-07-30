@@ -10,7 +10,7 @@ import CountDown from 'react-native-countdown-component';
 
 
 
-const trajetparcour = () => {
+const trajetparcour = (props) => {
 const [currentLatitude, setCurrentLatitude] = useState(0);
 const [currentLongitude, setCurrentLongitude] = useState(0);
 const [missions, setMissions] = useState("");
@@ -117,6 +117,7 @@ var markerTrajDefis = coordDefi.map((defi, i) => {
 
 return (
     <View style={{flex:1,flexDirection:'column', backgroundColor:'white', opacity: 1}}>
+     
         <MapView
             style={{ flex: 1, display: 'flex', alignItems:'flex-end', justifyContent:'flex-end'}}
             initialRegion={{
@@ -148,7 +149,7 @@ return (
                 coordinate={{ latitude: 43.294295, longitude: 5.374474 }}
             />
         </MapView>
-    
+        <Button title="back" onPress={()=>props.navigation.navigate('BottomNavigator', {screen: 'home'})}/>
     </View>
     )
 };

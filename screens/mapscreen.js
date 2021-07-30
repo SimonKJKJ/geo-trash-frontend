@@ -21,6 +21,9 @@ const mapscreen = (props) => {
   const [loctrash, setLocTrash] = useState('');
   const [trashlist, setTrashList] = useState([])
   const [pincolor, setPinColor] = useState('')
+  const [image, setImage] = useState ("");
+  const [image2, setImage2] = useState ("");
+  const [image3, setImage3] = useState ("");
   const [visibleInfo,setVisibleInfo] = useState(false);
 ///////////////////////////////////////////////////////////////////////initialisation marqueur lancement appli /////////////////////////////////////////
   const [latitudeClic,setLatitudeClic] = useState(0);
@@ -53,8 +56,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
   var a = 
     Math.sin(dLat/2) * Math.sin(dLat/2) +
     Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2)
-    ; 
+    Math.sin(dLon/2) * Math.sin(dLon/2); 
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));  //Math.atan2 prend les coordonnées en abscisse et en ordonnée du point
   var d = Math.round((R * c)*1000)   //distance en mètre
   return d;
@@ -85,15 +87,22 @@ if(addtrash) {
 }
 console.log(addtrash)
 
-let trashmap = (colorMarker) => {
+let trashmap = (colorMarker, imagemark) => {
   setTrashList([...trashlist, {longitude: loctrash.longitude, latitude: loctrash.latitude}])
   setPinColor(colorMarker)
+  setImage(imagemark)
   console.log("COLORMARKER////", pincolor)
-  if(colorMarker === "#ff0"){
-    setPinYellow(pinYellow+1)
-  } else if (colorMarker === "#d68c45"){
-    setPinBlack(pinBlack+1)
-  } else { setPinGreen(pinGreen+1) }
+  // if(colorMarker === "#ff0"){
+  //   setPinYellow(pinYellow+1)
+  // } else if (colorMarker === "#d68c45"){
+  //   setPinBlack(pinBlack+1)
+  // } else { setPinGreen(pinGreen+1) }
+  /////////////////////////////////////////////////////////image ajout poubelles//////////////////////////////
+  // if(colorMarker === "#ff0"){
+  //   setImage(require('./papiers.png'))
+  // } else if (colorMarker === "#d68c45"){
+  //   setImage(require('./poubelle.png'))
+  // } else { setImage(require('./verre.png'))}
   handleaddtrash();
   setVisible(!visible);
 }
@@ -211,15 +220,15 @@ let handleaddtrash = async () => {
   <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay}>
       <Text style={styles.text}>tu as trouver un nouveau bac ?</Text>
     
-        <TouchableOpacity onPress={() => trashmap('#ff0')}> 
+        <TouchableOpacity onPress={() => trashmap('#ff0', require('./papiers.png'))}> 
           <Image source={require('./pin-jaune.png')}/>
         </TouchableOpacity>
         <Text>Papier, plastique, carton</Text>
-        <TouchableOpacity onPress={() => trashmap('#d68c45')}>
+        <TouchableOpacity onPress={() => trashmap('#d68c45', require('./poubelle.png'))}>
           <Image source={require('./pin-noir.png')}/>
         </TouchableOpacity>
         <Text style={styles.textover}>Tout venant</Text>
-        <TouchableOpacity onPress={() => trashmap('#00ff00')}>
+        <TouchableOpacity onPress={() => trashmap('#00ff00', require('./verre.png'))}>
           <Image source={require('./pin-vert.png')}/>
         </TouchableOpacity>
         <Text>Verre</Text>
@@ -229,12 +238,12 @@ let handleaddtrash = async () => {
     
     <Button buttonStyle={styles.btnover} title="Valider"/>
   </Overlay>
-  <Overlay style={styles.overl} isVisible={visibleInfo} onBackdropPress={toggleInfo}>
+  <Overlay overlayStyle={styles.overl} isVisible={visibleInfo} onBackdropPress={toggleInfo}>
             <Text style={styles.text}>
               Courage ! {"\n"} Tu es à {distance} mètres {"\n"} à vol d'oiseau !
             </Text>
             <MapView
-              style={styles.overl}
+              style={styles.map}
               initialRegion={{
                 latitude: currentLatitude,
                 longitude: currentLongitude,
@@ -263,6 +272,15 @@ let handleaddtrash = async () => {
 )};
 
 const styles = StyleSheet.create({
+    map:{
+      flex:1,
+      borderRadius: 15,
+      width: 300,
+      maxHeight: 300,
+      margin:10,
+      alignItems:'center',
+    },
+
     btnover:{
       backgroundColor: '#2c6e49',
       borderRadius: 15,
@@ -307,11 +325,12 @@ const styles = StyleSheet.create({
     },
     overl:{
       display:'flex',
+      borderRadius: 200,
       flex :1,
-      width : 300,
+      width : 350,
+      maxHeight: 500,
       margin:10,
       alignItems:'center',
-      justifyContent:'center'
     },
     button:{
       borderRadius: 15,

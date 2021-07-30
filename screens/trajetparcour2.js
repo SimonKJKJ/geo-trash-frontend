@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View , Image, TouchableOpacity } from 'react-native';
-import { Overlay} from 'react-native-elements';
+import { Overlay, Button} from 'react-native-elements';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import CountDown from 'react-native-countdown-component';
 
 
-const trajetparcour2 = () => {
+const trajetparcour2 = (props) => {
     
     const [currentLatitude, setCurrentLatitude] = useState(0);
     const [currentLongitude, setCurrentLongitude] = useState(0);
@@ -143,6 +143,7 @@ return (
                 coordinate={{ latitude: 43.257704, longitude: 5.376038 }}
               />
             </MapView>
+            <Button title="back" onPress={()=>props.navigation.navigate('BottomNavigator', {screen: 'home'})}/>
     </View>
     );
 };
