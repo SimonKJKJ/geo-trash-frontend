@@ -50,7 +50,7 @@ const coordDefi=[{lat : 43.294627,long:5.376270},
 const DefiName =["Paradis ou enfer?","Un trésor était là","Attention au virage", "Trouvons de l'eau"]
 
 var markerTrajRoute = coordTrip.map((route, i) => {
-    return <Marker key={i} pinColor="green" coordinate={{ latitude: route.lat, longitude: route.long }}
+    return <Marker key={i} pinColor="green" image={require('./point100.png')} coordinate={{ latitude: route.lat, longitude: route.long }}
     />
 });
 
@@ -96,6 +96,7 @@ var markerTrajDefis = coordDefi.map((defi, i) => {
   return (
     <Marker key={i} 
     pinColor="blue" 
+    image={require('./mission150.png')}
     coordinate={{ latitude: defi.lat, longitude: defi.long }}
     onPress={()=>handleoverlayclick()}
   >
@@ -135,12 +136,14 @@ return (
             <Marker 
                 pinColor="#FF0"
                 title="start"
+                image={require('./start150.png')}
                 description="Ma position"
                 coordinate={{ latitude: 43.295048, longitude: 5.375826 }}
             />
             <Marker 
                 pinColor="#FF00ff"
                 title="Arrival"
+                image={require('./flag150.png')}
                 description="Ma position"
                 coordinate={{ latitude: 43.294295, longitude: 5.374474 }}
             />

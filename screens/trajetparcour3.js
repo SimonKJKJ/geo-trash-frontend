@@ -55,7 +55,7 @@ const trajetparcour3 = () => {
     const DefiName =["Recherche","L'eau du lac","L'archéologue", "Un tour au Zoo"]
 
     var markerTrajRoute = coordTrip.map((route, i) => {
-      return <Marker key={i} pinColor="green" image={require('./pngegg.png')} coordinate={{ latitude: route.lat, longitude: route.long }}
+      return <Marker key={i} pinColor="green" image={require('./point100.png')} coordinate={{ latitude: route.lat, longitude: route.long }}
       />
     });
   
@@ -99,7 +99,7 @@ const trajetparcour3 = () => {
         return (
           <Marker key={i} 
             pinColor="blue" 
-            image={require('./missions1.png')}
+            image={require('./mission150.png')}
             coordinate={{ latitude: defi.lat, longitude: defi.long }}
             onPress={()=>handleoverlayclick()}
           >
@@ -143,7 +143,7 @@ const trajetparcour3 = () => {
                     pinColor="#FF0"
                     title="start"
                     description="Ma position"
-                    image={require('./pngegg(3).png')}
+                    image={require('./start150.png')}
                     coordinate={{ latitude: coordDepart.lat, longitude: coordDepart.long }}
                   />
                   {console.log("coordinate start", coordDepart.lat)}
@@ -151,7 +151,7 @@ const trajetparcour3 = () => {
                     pinColor="#FF00ff"
                     title="Arrival"
                     description="Ma position"
-                    image={require('./arrival.png')}
+                    image={require('./flag150.png')}
                     coordinate={{ latitude: coodArrival.lat, longitude: coodArrival.long }}
                   />
                 </MapView>

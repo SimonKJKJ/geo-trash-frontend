@@ -48,10 +48,10 @@ const trajetparcour2 = () => {
     const DefiName =["La fontaine","Le chateau","L'esplanade", "Le sable chaud","Les pieds dans l'eau"]
   
     var markerTrajRoute = coordTrip.map((route, i) => {
-        return <Marker key={i} pinColor="green" coordinate={{ latitude: route.lat, longitude: route.long }}
+        return <Marker key={i} pinColor="green" image={require('./point100.png')} coordinate={{ latitude: route.lat, longitude: route.long }}
         />
     });
-
+    console.log("olmission state", olmission)
     const toggleMission = () => {
         setOlmission(!olmission);
       };  
@@ -80,31 +80,32 @@ let random = Math.floor(Math.random()*newmission.length);
 setMissions(newmission[random])
 console.log("nm", newmission.length)
 console.log("nmrandom", newmission[random])
-
 }
 let handleoverlayclick = () => {
     missionAleatoire();
     toggleMission()
 }
+console.log("olmission state2/", olmission)
 var markerTrajDefis = coordDefi.map((defi, i) => {
   return (
   <Marker key={i} 
-  pinColor="blue" 
-  coordinate={{ latitude: defi.lat, longitude: defi.long }}
-  onPress={()=>handleoverlayclick()}
->
-  <Overlay isVisible={olmission} onBackdropPress={toggleMission}>
-    <Text>{missions}</Text>
-    <CountDown
-  until={60*10}
-  onFinish={() => alert('temps écoulé ! bravo !')}
-  onPress={() => alert('a toi de jouer !')}
-  timeToShow={['M', 'S']}
-  timeLabels={{m: 'Minutes', s: 'Secondes'}}
-  size={20}
-/>
-</Overlay>
-</Marker>
+      pinColor="blue" 
+      image={require('./mission150.png')}
+      coordinate={{ latitude: defi.lat, longitude: defi.long }}
+      onPress={()=>handleoverlayclick()}
+    >
+    <Overlay isVisible={olmission} onBackdropPress={toggleMission}>
+      <Text>{missions}</Text>
+      <CountDown
+        until={60*10}
+        onFinish={() => alert('temps écoulé ! bravo !')}
+        onPress={() => alert('a toi de jouer !')}
+        timeToShow={['M', 'S']}
+        timeLabels={{m: 'Minutes', s: 'Secondes'}}
+        size={20}
+      />
+    </Overlay>
+  </Marker>
   )
 });
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,12 +131,14 @@ return (
               <Marker 
                 pinColor="#FF0"
                 title="start"
+                image={require('./start150.png')}
                 description="Ma position"
-                coordinate={{ latitude: 43.261262, longitude: 5.379513 }}
+                coordinate={{ latitude: 43.261322, longitude: 5.378314 }}
               />
               <Marker 
                 pinColor="#ff00ff"
                 title="Arrival"
+                image={require('./flag150.png')}
                 description="Ma position"
                 coordinate={{ latitude: 43.257704, longitude: 5.376038 }}
               />
