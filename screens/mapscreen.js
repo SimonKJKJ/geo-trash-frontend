@@ -148,14 +148,7 @@ let handleaddtrash = async () => {
       setLongitudeClic(markerLong)
       setColorPinOverlayDistance(colorpin)
       setCoordOverlayDistance({latitude: latitudeClic, longitude: longitudeClic})
-      console.log("MARKER LAT", markerLat)
-      console.log("MARKER LONG", markerLong)
-      console.log("COLORPIN", colorpin)
-      console.log("COLORPIN OVERLAY DISTANCE", colorPinOverlayDistance)
-      console.log("LATITUDE CLIC", latitudeClic)
-      console.log("LONGITUDE CLIC", longitudeClic)
       setDistance(getDistance(currentLatitude, currentLongitude,latitudeClic,longitudeClic))
-      console.log("DISTANCE", distance)
     }
 //////////////////////////////////////////////////////////////////////////////////////////.Map ajout poubelles///////////////////////////////////////////////
     let trashstart = markers.map((mark,i) => {   
@@ -181,9 +174,9 @@ let handleaddtrash = async () => {
       coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}/>
 {/* ///////////////////////////////////////////////////////Marqueur test ////////////////////////////////////////////////////////////////////////////// */}
       <Marker pinColor="green"
-              coordinate={{latitude: 43.29, longitude: 5.37}}
-              onPress={toggleInfo}
-              />
+        coordinate={{latitude: 43.29, longitude: 5.37}}
+        onPress={toggleInfo}
+        />
 {/* ///////////////////////////////////////////////////////Fin Marqueur test/////////////////////////////////////////////////////////////////////////// */}
   </MapView>
     <View style={{flexDirection:'row', justifyContent:'space-around'}}>
@@ -209,38 +202,41 @@ let handleaddtrash = async () => {
   </Overlay>
 {/* ////////////////////////////////////////////////////////////OVERLAY AJOUT POUBELLES///////////////////////////////////////////////////////////////// */}
   <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay}>
-      <Text style={styles.text}>tu as trouver un nouveau bac ?</Text>
+        <Text style={styles.text}>Tu as trouver un nouveau bac ?</Text>
     
         <TouchableOpacity onPress={() => trashmap('#ff0')}> 
           <Image source={require('./pin-jaune.png')}/>
         </TouchableOpacity>
+
         <Text>Papier, plastique, carton</Text>
+
         <TouchableOpacity onPress={() => trashmap('#d68c45')}>
           <Image source={require('./pin-noir.png')}/>
         </TouchableOpacity>
+
         <Text style={styles.textover}>Tout venant</Text>
+
         <TouchableOpacity onPress={() => trashmap('#00ff00')}>
           <Image source={require('./pin-vert.png')}/>
         </TouchableOpacity>
+
         <Text>Verre</Text>
-        {console.log("numberyellow",pinYellow)}
-        {console.log("numberblack",pinBlack)}
-        {console.log("numbergreen",pinGreen)}
-    
-    <Button buttonStyle={styles.btnover} title="Valider"/>
+
+        <Button buttonStyle={styles.btnover} title="Valider"/>
   </Overlay>
-  <Overlay style={styles.overl} isVisible={visibleInfo} onBackdropPress={toggleInfo}>
-            <Text style={styles.text}>
-              Courage ! {"\n"} Tu es à {distance} mètres {"\n"} à vol d'oiseau !
-            </Text>
-            <MapView
-              style={styles.overl}
-              initialRegion={{
-                latitude: currentLatitude,
-                longitude: currentLongitude,
-                latitudeDelta: 0.0092,
-                longitudeDelta: 0.0092,
-              }}>  
+  <Overlay overlayStyle={styles.overl} isVisible={visibleInfo} onBackdropPress={toggleInfo}>
+        <Text style={styles.text}>
+          Courage ! {"\n"} Tu es à {distance} mètres {"\n"} à vol d'oiseau !
+        </Text>
+
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: currentLatitude,
+            longitude: currentLongitude,
+            latitudeDelta: 0.0092,
+            longitudeDelta: 0.0092,
+          }}>  
               <Marker key={"currentPos"}
                 pinColor="red"
                 title="Je suis ici"
@@ -252,12 +248,13 @@ let handleaddtrash = async () => {
               coordinate={coordOverlayDistance}
               onPress={toggleInfo}
               />
-            </MapView>
-            <Button containerStyle={{width: "80%", marginTop:10, marginBottom: 100}} 
-              buttonStyle={styles.button}
-              onPress={() => setVisibleInfo(false)}
-              title="Retour"
-            />
+        </MapView>
+
+        <Button containerStyle={{width: "80%", marginTop:20, marginBottom: 10}} 
+          buttonStyle={styles.button}
+          onPress={() => setVisibleInfo(false)}
+          title="Retour"
+        />
         </Overlay>
 </View>
 )};
@@ -266,7 +263,8 @@ const styles = StyleSheet.create({
     btnover:{
       backgroundColor: '#2c6e49',
       borderRadius: 15,
-      marginTop: 15
+      margin: 15,
+      width:"80%"
     },
     overlay:{
       flexDirection:'column',
@@ -293,7 +291,9 @@ const styles = StyleSheet.create({
     text:{
       fontWeight:'bold',
       fontSize:20,
-      margin:30,
+      margin:10,
+      marginBottom:20,
+      fontFamily: 'Poppins',
     },
     bloc:{
       display:'flex',
@@ -310,10 +310,18 @@ const styles = StyleSheet.create({
       display:'flex',
       flex :1,
       width : 300,
+      maxHeight:500,
       margin:10,
       alignItems:'center',
       justifyContent:'center',
-      borderRadius:25
+      borderRadius:25,
+    },
+    map:{
+      display:"flex",
+      flex:1,
+      width:300,
+      maxHeight:300
+
     },
     button:{
       borderRadius: 15,
