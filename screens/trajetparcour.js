@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View , Image, TouchableOpacity } from 'react-native';
 import { Overlay, Button} from 'react-native-elements';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { FontAwesome } from '@expo/vector-icons';
@@ -19,29 +19,7 @@ const [olmission, setOlmission] = useState(false);
 ///////////////////////////////////////VARIABLES PARCOURS 1//////////////////////////////////////
 const coordDepart= {lat : 49.295048,long:5.375826};
 const coodArrival={lat:43.294295,long:5.374474};
-const coordTrip=[{lat : 43.295088,long:5.375998},
-    {lat : 43.294888,long:5.376154},
-    {lat : 43.294482,long:5.376331},
-    {lat : 43.294336,long:5.376412},
-    {lat : 43.294142,long:5.376482},
-    {lat : 43.293971,long:5.376548},
-    {lat : 43.293778,long:5.376623},
-    {lat : 43.293682,long:5.376695},
-    {lat : 43.293754,long:5.377060},
-    {lat : 43.293792,long:5.377226},
-    {lat : 43.293896,long:5.377223},
-    {lat : 43.294042,long:5.377160},
-    {lat : 43.294211,long:5.377048},
-    {lat : 43.294526,long:5.376966},
-    {lat:43.294689,long:5.376613},
-    {lat:43.294630,long:5.376387},
-    {lat:43.294570,long:5.376155},
-    {lat:43.294493,long:5.375859},
-    {lat:43.294426,long:5.375576},
-    {lat:43.294326,long:5.375206},
-    {lat:43.294228,long:5.374823},
-    {lat:43.294325,long:5.374498}
-];
+
 const coordDefi=[{lat : 43.294627,long:5.376270},
     {lat : 43.293720,long:5.376880},
     {lat : 43.294303,long:5.376880},
@@ -49,10 +27,7 @@ const coordDefi=[{lat : 43.294627,long:5.376270},
 ];
 const DefiName =["Paradis ou enfer?","Un trésor était là","Attention au virage", "Trouvons de l'eau"]
 
-var markerTrajRoute = coordTrip.map((route, i) => {
-    return <Marker key={i} pinColor="green" image={require('./point100.png')} coordinate={{ latitude: route.lat, longitude: route.long }}
-    />
-});
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,14 +100,42 @@ return (
             latitudeDelta: 0.0032,
             longitudeDelta: 0.0032,
         }}>
+          <Polyline
+            coordinates={[
+              {latitude : 43.295088,longitude:5.375998},
+              {latitude : 43.294888,longitude:5.376154},
+              {latitude : 43.294482,longitude:5.376331},
+              {latitude : 43.294336,longitude:5.376412},
+              {latitude : 43.294142,longitude:5.376482},
+              {latitude : 43.293971,longitude:5.376548},
+              {latitude : 43.293778,longitude:5.376623},
+              {latitude : 43.293682,longitude:5.376695},
+              {latitude : 43.293754,longitude:5.377060},
+              {latitude : 43.293792,longitude:5.377226},
+              {latitude : 43.293896,longitude:5.377223},
+              {latitude : 43.294042,longitude:5.377160},
+              {latitude : 43.294211,longitude:5.377048},
+              {latitude : 43.294526,longitude:5.376966},
+              {latitude:43.294689,longitude:5.376613},
+              {latitude:43.294630,longitude:5.376387},
+              {latitude:43.294570,longitude:5.376155},
+              {latitude:43.294493,longitude:5.375859},
+              {latitude:43.294426,longitude:5.375576},
+              {latitude:43.294326,longitude:5.375206},
+              {latitude:43.294228,longitude:5.374823},
+              {latitude:43.294325,longitude:5.374498}
+            ]}
+            strokeColor="#0000ff"
+		        strokeWidth={5}
+            lineDashPattern={[1]}
+          />
+
             <Marker key={"currentPos"}
                 pinColor="red"
                 title="Je suis ici"
                 description="Ma position"
                 coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
             />
-
-            {markerTrajRoute}
             {markerTrajDefis}
 
             <Marker 

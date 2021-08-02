@@ -44,7 +44,7 @@ const parcourchoix = (props) => {
               <Text style={styles.text}>Temps du parcours : 3h30</Text>
               <Text style={styles.text}>Distance à parcourir : 3,1km</Text>
               <Button  
-              containerStyle={{width: "80%", marginTop:10, marginBottom: 100}} 
+              containerStyle={{width: "100%", marginTop:10, marginBottom: 100}} 
               buttonStyle={styles.button} 
               onPress={() =>props.navigation.navigate('trajet3')}
               title='Démarrer'

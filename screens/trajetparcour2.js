@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View , Image, TouchableOpacity } from 'react-native';
 import { Overlay, Button} from 'react-native-elements';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import CountDown from 'react-native-countdown-component';
@@ -18,27 +18,6 @@ const trajetparcour2 = (props) => {
     const routeName ="LES FONDS MARINS";
     const timeRoute ="2h15";
     const distanceRoute="2,7km";
-    const coordTrip=[{lat : 43.261114,long:5.379134},
-        {lat : 43.260690,long:5.379391},
-        {lat : 43.260325,long:5.379635},
-        {lat : 43.259419,long:5.380203},
-        {lat : 43.258847,long:5.380582},
-        {lat : 43.258404,long:5.380866},
-        {lat : 43.257950,long:5.381164},
-        {lat : 43.257078,long:5.381443},
-        {lat : 43.256285,long:5.381698},
-        {lat : 43.255690,long:5.381585},
-        {lat : 43.255081,long:5.381016},
-        {lat : 43.254839,long:5.380437},
-        {lat : 43.254587,long:5.379781},
-        {lat : 43.254478,long:5.379241},
-        {lat : 43.254538,long:5.377938},
-        {lat : 43.254611,long:5.376609},
-        {lat : 43.254810,long:5.375273},
-        {lat : 43.255524,long:5.375173},
-        {lat : 43.256582,long:5.375763},
-        {lat : 43.257096,long:5.375779},
-    ];
     const coordDefi=[{lat : 43.259862,long:5.379932},
         {lat : 43.257520,long:5.381623},
         {lat : 43.254822,long:5.376053},
@@ -47,10 +26,7 @@ const trajetparcour2 = (props) => {
     ];
     const DefiName =["La fontaine","Le chateau","L'esplanade", "Le sable chaud","Les pieds dans l'eau"]
   
-    var markerTrajRoute = coordTrip.map((route, i) => {
-        return <Marker key={i} pinColor="green" image={require('./point100.png')} coordinate={{ latitude: route.lat, longitude: route.long }}
-        />
-    });
+
     console.log("olmission state", olmission)
     const toggleMission = () => {
         setOlmission(!olmission);
@@ -119,14 +95,40 @@ return (
                 longitude: 5.378762,
                 latitudeDelta: 0.0072,
                 longitudeDelta: 0.0072,
-              }}>  
+              }}> 
+            <Polyline
+            coordinates={[
+              {latitude : 43.261114,longitude :5.379134},
+              {latitude : 43.260690,longitude :5.379391},
+              {latitude : 43.260325,longitude :5.379635},
+              {latitude : 43.259419,longitude :5.380203},
+              {latitude : 43.258847,longitude :5.380582},
+              {latitude : 43.258404,longitude :5.380866},
+              {latitude : 43.257950,longitude :5.381164},
+              {latitude : 43.257078,longitude :5.381443},
+              {latitude : 43.256285,longitude :5.381698},
+              {latitude : 43.255690,longitude :5.381585},
+              {latitude : 43.255081,longitude :5.381016},
+              {latitude : 43.254839,longitude :5.380437},
+              {latitude : 43.254587,longitude :5.379781},
+              {latitude : 43.254478,longitude :5.379241},
+              {latitude : 43.254538,longitude :5.377938},
+              {latitude : 43.254611,longitude :5.376609},
+              {latitude : 43.254810,longitude :5.375273},
+              {latitude : 43.255524,longitude :5.375173},
+              {latitude : 43.256582,longitude :5.375763},
+              {latitude : 43.257096,longitude :5.375779},
+            ]}
+            strokeColor="#0000ff"
+		        strokeWidth={5}
+            lineDashPattern={[1]}
+          /> 
               <Marker key={"currentPos"}
                 pinColor="red"
                 title="Je suis ici"
                 description="Ma position"
                 coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
               />
-              {markerTrajRoute}
               {markerTrajDefis}
 
               <Marker 

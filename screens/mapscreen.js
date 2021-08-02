@@ -18,9 +18,9 @@ const mapscreen = (props) => {
   const [overfilter, setOverfilter] = useState(false);
 /////////////////////////////////////////////////////////////////////////////ajout poubelle au clic/////////////////////////////////////////////////////
   const [addtrash, setAddTrash] = useState(false);
-  const [loctrash, setLocTrash] = useState('');
+  const [loctrash, setLocTrash] = useState("");
   const [trashlist, setTrashList] = useState([])
-  const [pincolor, setPinColor] = useState('')
+  const [pincolor, setPinColor] = useState("")
   const [image, setImage] = useState ("");
   const [image2, setImage2] = useState ("");
   const [image3, setImage3] = useState ("");
@@ -29,12 +29,11 @@ const mapscreen = (props) => {
   const [latitudeClic,setLatitudeClic] = useState(0);
   const [longitudeClic,setLongitudeClic] = useState(0);
   const [distance, setDistance] = useState(0);
-  const [colorPinOverlayDistance,setColorPinOverlayDistance] = useState("#ff0");
+  const [colorPinOverlayDistance,setColorPinOverlayDistance] = useState("");
   const [coordOverlayDistance,setCoordOverlayDistance] = useState({});
 ////////////////////////////////////////////////////////////////////////////initialisation marqueur lancement appli ////////////////////////////////////
   const [markers, setMarkers] = useState([]);
   
-
   useEffect(()=> {
     async function marker() {
       const mark = await fetch('https://mysterious-plateau-19771.herokuapp.com/calltrash')
@@ -79,46 +78,29 @@ function getDistance(lat1, lon1, lat2, lon2) {
 let trash = (onPress) => {
   setAddTrash(true);
   setLocTrash({latitude : onPress.nativeEvent.coordinate.latitude, longitude: onPress.nativeEvent.coordinate.longitude})
-  console.log("trashlatitude////", onPress.nativeEvent.coordinate.latitude)
-  console.log("trashlongitude////", onPress.nativeEvent.coordinate.longitude)
 }
 if(addtrash) {
-  console.log("ajout poubelle possible")
 }
-console.log(addtrash)
-
-let trashmap = (colorMarker, imagemark) => {
+///////////////////////////////////////////////////////////////////////////////////////////////requête controlleur/////////////////////////////////////////////////////////
+let trashmap = async (colorMarker) => {
   setTrashList([...trashlist, {longitude: loctrash.longitude, latitude: loctrash.latitude}])
   setPinColor(colorMarker)
-  setImage(imagemark)
-  console.log("COLORMARKER////", pincolor)
-  // if(colorMarker === "#ff0"){
-  //   setPinYellow(pinYellow+1)
-  // } else if (colorMarker === "#d68c45"){
-  //   setPinBlack(pinBlack+1)
-  // } else { setPinGreen(pinGreen+1) }
-  /////////////////////////////////////////////////////////image ajout poubelles//////////////////////////////
-  // if(colorMarker === "#ff0"){
-  //   setImage(require('./papiers.png'))
-  // } else if (colorMarker === "#d68c45"){
-  //   setImage(require('./poubelle.png'))
-  // } else { setImage(require('./verre.png'))}
-  handleaddtrash();
-  setVisible(!visible);
+  console.log("COLORMARKER////", colorMarker)
+  console.log("loctrash.longitude////", loctrash.longitude)
+  console.log("loctrash.latitude////", loctrash.latitude)
+  console.log("pipin", pincolor)
+  const trashin = await fetch('https://mysterious-plateau-19771.herokuapp.com/addtrash', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: `latitude=${loctrash.latitude}&longitude=${loctrash.longitude}&color=${colorMarker}`
+})
+const trash = await trashin.json();
+console.log("trashjson////", trash.newtrash.color)
+setVisible(!visible);
 }
 let trashmark = trashlist.map((trash, i) => {
   return <Marker key={i}  pinColor= {pincolor} coordinate={{latitude: trash.latitude, longitude: trash.longitude}}/>
 })
-///////////////////////////////////////////////////////////////////////////////////////////////requête controlleur/////////////////////////////////////////////////////////
-let handleaddtrash = async () => {
-  const trashin = await fetch('https://mysterious-plateau-19771.herokuapp.com/addtrash', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: `latitude=${loctrash.latitude}&longitude=${loctrash.longitude}&color=${pincolor}`
-})
-  const trash = await trashin.json();
-  console.log("trashjson////", trash)
-}
 ////////////////////////////////////////////////////////commandes overlays////////////////////////////////////////////////////////////////////////////    
     const toggleOverlay = () => {
         setVisible(!visible);
@@ -130,27 +112,15 @@ let handleaddtrash = async () => {
       setVisibleInfo(!visible)
     }
 /////////////////////////////////////////////////////////////////////////////////////commande filtres/////////////////////////////////////////////////////////////////////
-////////////////// 1- boucle sur tableau markers ////////////////////////////////////
-////////////////// 2- acceder a la propriété color //////////////////////////////////
-////////////////// 3- filtre par couleur ////////////////////////////////////////////
-////////////////// 4- push color copie //////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////A REVOIR/////////////////////////////////////////////
-// const getMarkerFromColor = (colormark) => {
-//   console.log("colormark", colormark)
-//   console.log("markers//", markers)
-//   let copie = [];
-//   markers.map((mark, i)=> {
-//     if(mark.color === colormark) {
-//       const xx = [... copie, mark.color]
-//       console.log("mark////", xx)
-//     }
-//   })
-//   setMarkers(copie)
-//   console.log("marker///", markers)
-// }
-////////////////////////////////////////////////////////////////////////////////////.map pour marqueurs lancement application///////////////////////////////////////////// 
+const getMarkerFromColor = async (colormark) => {
+    const filter = await fetch(`https://mysterious-plateau-19771.herokuapp.com/trash/color/${colormark}`)
+    console.log("colormark///", colormark )
+    const filterJson = await filter.json();
+    setMarkers(filterJson.colorfilter)
+    console.log("filterJSON/////", filterJson)
+}
 /////////////////////////////////////////////////////////////////////////INTEGRATION MAP//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////Fonction pour OVERLAY DISTANCE trash////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////Fonction pour OVERLAY DISTANCE trash////////////////////////////////////////////////////////////
     let handleClicTrash = (markerLat, markerLong, colorpin) =>{
       setVisibleInfo(!visible)
       setLatitudeClic(markerLat)
@@ -160,8 +130,9 @@ let handleaddtrash = async () => {
       setDistance(getDistance(currentLatitude, currentLongitude,latitudeClic,longitudeClic))
     }
 //////////////////////////////////////////////////////////////////////////////////////////.Map ajout poubelles///////////////////////////////////////////////
-    let trashstart = markers.map((mark,i) => {   
-    return <Marker key={i} pinColor= {mark.color} onPress={()=>handleClicTrash(mark.latitude,mark.longitude,mark.color)} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/>   
+      let trashstart = markers.map((mark,i) => { 
+             console.log("marke.color/////", mark.color)
+    return <Marker key={i} title={mark.color} pinColor= {mark.color} onPress={()=>handleClicTrash(mark.latitude,mark.longitude,mark.color)} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/> 
     })
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
@@ -182,10 +153,6 @@ let handleaddtrash = async () => {
       description="Ma position"
       coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}/>
 {/* ///////////////////////////////////////////////////////Marqueur test ////////////////////////////////////////////////////////////////////////////// */}
-      <Marker pinColor="green"
-        coordinate={{latitude: 43.29, longitude: 5.37}}
-        onPress={toggleInfo}
-        />
 {/* ///////////////////////////////////////////////////////Fin Marqueur test/////////////////////////////////////////////////////////////////////////// */}
   </MapView>
     <View style={{flexDirection:'row', justifyContent:'space-around'}}>
@@ -195,35 +162,40 @@ let handleaddtrash = async () => {
 {/* /////////////////////////////////////////////////////////////////OVERLAY FILTRES////////////////////////////////////////////////////////////////////*/}
   <Overlay overlayStyle={styles.overlay} isVisible={overfilter} onBackdropPress={changestateover}>
     <Text style={{fontSize: 24}}>Que cherches tu ?</Text>
-    <TouchableOpacity onPress={()=>getMarkerFromColor("#ff0")}>
+    <TouchableOpacity onPress={()=>getMarkerFromColor('yellow')}>
       <Image source={require('./pin-jaune.png')}/>
     </TouchableOpacity>
       <Text style={styles.textover}>papier, pastique, carton</Text>
-    <TouchableOpacity onPress={()=>getMarkerFromColor('#d68c45')}>
+    <TouchableOpacity onPress={()=>getMarkerFromColor('orange')}>
       <Image source={require('./pin-noir.png')}/>
     </TouchableOpacity>
     <Text style={styles.textover}>tout venant</Text>
-    <TouchableOpacity onPress={()=>getMarkerFromColor('#00ff00')}>
+    <TouchableOpacity onPress={()=>getMarkerFromColor('green')}>
       <Image source={require('./pin-vert.png')}/>
     </TouchableOpacity>
     <Text style={styles.textover}>verre</Text>
-    <Button  buttonStyle={styles.btnover} title='choisir'/>
+    {/* <TouchableOpacity onPress={()=> image}>
+      <Image source={require('./pin-vert.png')}/>
+    </TouchableOpacity>
+    <Text style={styles.textover}>verre</Text> */}
+
+
   </Overlay>
 {/* ////////////////////////////////////////////////////////////OVERLAY AJOUT POUBELLES///////////////////////////////////////////////////////////////// */}
   <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay}>
         <Text style={styles.text}>Tu as trouver un nouveau bac ?</Text>
     
-        <TouchableOpacity onPress={() => trashmap('#ff0', require('./papiers.png'))}> 
+        <TouchableOpacity onPress={() => trashmap('yellow')}>
           <Image source={require('./pin-jaune.png')}/>
         </TouchableOpacity>
 
         <Text>Papier, plastique, carton</Text>
-        <TouchableOpacity onPress={() => trashmap('#d68c45', require('./poubelle.png'))}>
+        <TouchableOpacity onPress={() => trashmap('orange')}>
           <Image source={require('./pin-noir.png')}/>
         </TouchableOpacity>
 
         <Text style={styles.textover}>Tout venant</Text>
-        <TouchableOpacity onPress={() => trashmap('#00ff00', require('./verre.png'))}>
+        <TouchableOpacity onPress={() => trashmap('green')}>
           <Image source={require('./pin-vert.png')}/>
         </TouchableOpacity>
 
@@ -308,7 +280,6 @@ const styles = StyleSheet.create({
       fontSize:20,
       margin:10,
       marginBottom:20,
-      fontFamily: 'Poppins',
     },
     bloc:{
       display:'flex',
@@ -323,7 +294,7 @@ const styles = StyleSheet.create({
     },
     overl:{
       display:'flex',
-      borderRadius: 200,
+      borderRadius: 50,
       flex :1,
       width : 350,
       maxHeight: 500,

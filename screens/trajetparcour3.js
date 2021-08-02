@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View , Image, TouchableOpacity } from 'react-native';
 import { Overlay, Button} from 'react-native-elements';
-import MapView, { Marker} from 'react-native-maps';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import CountDown from 'react-native-countdown-component';
@@ -19,34 +19,6 @@ const trajetparcour3 = (props) => {
     const distanceRoute="3,1km";
     const coordDepart= {lat : 43.305112,long:5.394679};
     const coodArrival={lat:43.305195,long:5.397192};
-    const coordTrip=[{lat : 43.305027,long:5.394801},
-        {lat : 43.304953,long:5.394976},
-        {lat : 43.304900,long:5.395190},
-        {lat : 43.305151,long:5.395437},
-        {lat : 43.305151,long:5.395608},
-        {lat : 43.305069,long:5.395782},
-        {lat : 43.304959,long:5.395982},
-        {lat : 43.305075,long:5.396107},
-        {lat : 43.305181,long:5.396244},
-        {lat : 43.305047,long:5.396249},
-        {lat : 43.304909,long:5.396288},
-        {lat : 43.304775,long:5.396340},
-        {lat : 43.304714,long:5.396366},
-        {lat : 43.304822,long:5.396422},
-        {lat:43.304924,long:5.396494},
-        {lat:43.305154,long:5.396471},
-        {lat:43.305254,long:5.396464},
-        {lat:43.305346,long:5.396471},
-        {lat:43.305436,long:5.396517},
-        {lat:43.305534,long:5.396557},
-        {lat:43.305582,long:5.396690},
-        {lat:43.305611,long:5.396805},
-        {lat:43.305629,long:5.396973},
-        {lat:43.305555,long:5.397029},
-        {lat:43.305495,long:5.397150},
-        {lat:43.305383,long:5.397199},
-        {lat:43.305283,long:5.397183}
-    ];
     const coordDefi=[{lat : 43.305020,long:5.395374},
         {lat : 43.305147,long:5.396295},
         {lat : 43.305024,long:5.396541},
@@ -54,10 +26,6 @@ const trajetparcour3 = (props) => {
     ];
     const DefiName =["Recherche","L'eau du lac","L'archéologue", "Un tour au Zoo"]
 
-    var markerTrajRoute = coordTrip.map((route, i) => {
-      return <Marker key={i} pinColor="green" image={require('./point100.png')} coordinate={{ latitude: route.lat, longitude: route.long }}
-      />
-    });
   
 
 
@@ -132,6 +100,41 @@ const trajetparcour3 = (props) => {
                     latitudeDelta: 0.0032,
                     longitudeDelta: 0.0032,
                 }}>  
+                            <Polyline
+            coordinates={[
+                {latitude : 43.305112,longitude :5.394679},
+                {latitude : 43.305027,longitude :5.394801},
+                {latitude : 43.304953,longitude :5.394976},
+                {latitude : 43.304900,longitude :5.395190},
+                {latitude : 43.305151,longitude :5.395437},
+                {latitude : 43.305151,longitude :5.395608},
+                {latitude : 43.305069,longitude :5.395782},
+                {latitude : 43.304959,longitude :5.395982},
+                {latitude : 43.305075,longitude :5.396107},
+                {latitude : 43.305181,longitude :5.396244},
+                {latitude : 43.305047,longitude :5.396249},
+                {latitude : 43.304909,longitude :5.396288},
+                {latitude : 43.304775,longitude :5.396340},
+                {latitude : 43.304714,longitude :5.396366},
+                {latitude : 43.304822,longitude :5.396422},
+                {latitude :43.304924,longitude :5.396494},
+                {latitude :43.305154,longitude :5.396471},
+                {latitude :43.305254,longitude :5.396464},
+                {latitude :43.305346,longitude :5.396471},
+                {latitude :43.305436,longitude :5.396517},
+                {latitude :43.305534,longitude :5.396557},
+                {latitude :43.305582,longitude :5.396690},
+                {latitude :43.305611,longitude :5.396805},
+                {latitude :43.305629,longitude :5.396973},
+                {latitude :43.305555,longitude :5.397029},
+                {latitude :43.305495,longitude :5.397150},
+                {latitude :43.305383,longitude :5.397199},
+                {latitude :43.305283,longitude :5.397183}
+            ]}
+            strokeColor="#0000ff"
+		        strokeWidth={5}
+            lineDashPattern={[1]}
+          /> 
                 <Marker key={"currentPos"}
                     pinColor="red"
                     title="Je suis ici"
@@ -139,7 +142,6 @@ const trajetparcour3 = (props) => {
                     coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
                 />
 
-                {markerTrajRoute}
                 {markerTrajDefis}
 
                 <Marker 
