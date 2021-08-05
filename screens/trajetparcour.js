@@ -70,7 +70,7 @@ var markerTrajDefis = coordDefi.map((defi, i) => {
   return (
     <Marker key={i} 
     pinColor="blue" 
-    image={require('./mission150.png')}
+    image={require('../assets/mission150.png')}
     coordinate={{ latitude: defi.lat, longitude: defi.long }}
     onPress={()=>handleoverlayclick()}
   >
@@ -141,17 +141,17 @@ return (
             <Marker 
                 pinColor="#FF0"
                 title="start"
-                image={require('./start150.png')}
+                image={require('../assets/start150.png')}
                 description="Ma position"
-                image={require('./pngegg(3).png')}
+                image={require('../assets/pngegg(3).png')}
                 coordinate={{ latitude: 43.295048, longitude: 5.375826 }}
             />
             <Marker 
                 pinColor="#FF00ff"
                 title="Arrival"
-                image={require('./flag150.png')}
+                image={require('../assets/flag150.png')}
                 description="Ma position"
-                image={require('./arrival.png')}
+                image={require('../assets/arrival.png')}
                 coordinate={{ latitude: 43.294295, longitude: 5.374474 }}
             />
         </MapView>

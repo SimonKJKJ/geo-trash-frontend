@@ -10,7 +10,7 @@ const parcourchoix = (props) => {
           <Text style={styles.bigtitle}>Parcours Débutant</Text>
           <Card containerStyle={{height:"60%",justifyContent: 'center', padding: 30,margin:10,borderRadius:15,shadowColor:"#000",shadowOpacity:0.8,shadowRadius:10, shadowOffset :{width:1,height:1}}}>
               <Card.Title style={styles.title}>ATTAQUE AU CENTRE VILLE</Card.Title>
-              <Card.Image source={require('./parcours-marseille.png')}></Card.Image>
+              <Card.Image source={require('../assets/parcours-marseille.png')}></Card.Image>
               <Text style={styles.text}>Temps du parcours : 1h30</Text>
               <Text style={styles.text}>Distance à parcourir : 1,5km</Text>
               <Button  
@@ -25,7 +25,7 @@ const parcourchoix = (props) => {
           <Text style={styles.bigtitle}>Parcours Intermédiaire</Text>
           <Card containerStyle={{height:"60%",justifyContent: 'center',padding: 30,margin:10,borderRadius:15,shadowColor:"#000",shadowOpacity:0.8,shadowRadius:10, shadowOffset :{width:1,height:1}}} >
               <Card.Title style={styles.title}>LES FONDS MARINS</Card.Title>
-              <Card.Image source={require('./parcours-marseille.png')}></Card.Image>
+              <Card.Image source={require('../assets/parcours-marseille.png')}></Card.Image>
               <Text style={styles.text}>Temps du parcours : 2h15</Text>
               <Text style={styles.text}>Distance à parcourir : 2,7km</Text>
               <Button  
@@ -40,7 +40,7 @@ const parcourchoix = (props) => {
           <Text style={styles.bigtitle}>Parcours Avancé</Text>
           <Card containerStyle={{height:"60%",justifyContent: 'center',padding: 30,margin:10,borderRadius:15,shadowColor:"#000",shadowOpacity:0.8,shadowRadius:10, shadowOffset :{width:1,height:1}}}>
               <Card.Title style={styles.title}>LA FORET ENCHANTEE</Card.Title>
-              <Card.Image source={require('./parcours-marseille.png')}></Card.Image>
+              <Card.Image source={require('../assets/parcours-marseille.png')}></Card.Image>
               <Text style={styles.text}>Temps du parcours : 3h30</Text>
               <Text style={styles.text}>Distance à parcourir : 3,1km</Text>
               <Button  

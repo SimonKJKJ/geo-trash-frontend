@@ -22,7 +22,7 @@ const login = (props) => {
 
         if(userin.result === false){
             setErrorSignin(userin.error)
-            return (props.navigation.navigate('BottomNavigator', {screen: 'home'})) ////////////////////remettre return (props.navigation.navigate('login')) /////////////
+            return (props.navigation.navigate('login'))
         } else {
             props.sendfirstname(userin) 
             console.log("userinfn///",props.sendfirstname)
@@ -39,7 +39,7 @@ const login = (props) => {
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View style={styles.container}>
-                    <Image style={styles.image} source={require('./Geotrash.png')}/>
+                    <Image style={styles.image} source={require('../assets/Geotrash.png')}/>
                     <Input onChangeText={(value) => setEmailIn(value)} containerStyle={styles.input} type="text" name='email' placeholder="Email"/>
                     <Input onChangeText={(value) => setPasswordIn(value)} containerStyle={styles.input} type="text" name='password' placeholder="Password" secureTextEntry={true}/>
                     {errorsin}

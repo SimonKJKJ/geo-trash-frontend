@@ -71,7 +71,7 @@ const trajetparcour3 = (props) => {
         return (
           <Marker key={i} 
             pinColor="blue" 
-            image={require('./mission150.png')}
+            image={require('../assets/mission150.png')}
             coordinate={{ latitude: defi.lat, longitude: defi.long }}
             onPress={()=>handleoverlayclick()}
           >
@@ -148,7 +148,7 @@ const trajetparcour3 = (props) => {
                     pinColor="#FF0"
                     title="start"
                     description="Ma position"
-                    image={require('./start150.png')}
+                    image={require('../assets/start150.png')}
                     coordinate={{ latitude: coordDepart.lat, longitude: coordDepart.long }}
                 />
                   {console.log("coordinate start", coordDepart.lat)}
@@ -156,7 +156,7 @@ const trajetparcour3 = (props) => {
                     pinColor="#FF00ff"
                     title="Arrival"
                     description="Ma position"
-                    image={require('./flag150.png')}
+                    image={require('../assets/flag150.png')}
                     coordinate={{ latitude: coodArrival.lat, longitude: coodArrival.long }}
                 />
                 </MapView>

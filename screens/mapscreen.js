@@ -5,7 +5,7 @@ import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { FontAwesome } from '@expo/vector-icons'; 
-const mapscreen = (props) => {
+const mapscreen = () => {
 ////////////////////////////////////////////////////////////////////////////////pin couleur + au clic///////////////////////////////////////////////////  
   const [pinYellow, setPinYellow] = useState(0);
   const [pinBlack, setPinBlack] = useState(0);
@@ -33,7 +33,6 @@ const mapscreen = (props) => {
   const [coordOverlayDistance,setCoordOverlayDistance] = useState({});
 ////////////////////////////////////////////////////////////////////////////initialisation marqueur lancement appli ////////////////////////////////////
   const [markers, setMarkers] = useState([]);
-  
   useEffect(()=> {
     async function marker() {
       const mark = await fetch('https://mysterious-plateau-19771.herokuapp.com/calltrash')
@@ -81,6 +80,7 @@ let trash = (onPress) => {
 }
 if(addtrash) {
 }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////requête controlleur/////////////////////////////////////////////////////////
 let trashmap = async (colorMarker) => {
   setTrashList([...trashlist, {longitude: loctrash.longitude, latitude: loctrash.latitude}])
@@ -111,10 +111,14 @@ let trashmark = trashlist.map((trash, i) => {
     const toggleInfo =() => {
       setVisibleInfo(!visible)
     }
+
+// `http:/192.168.1.95:3000/trash/color/${colormark}`
 /////////////////////////////////////////////////////////////////////////////////////commande filtres/////////////////////////////////////////////////////////////////////
 const getMarkerFromColor = async (colormark) => {
+  console.log("rentré dans la function")
     const filter = await fetch(`https://mysterious-plateau-19771.herokuapp.com/trash/color/${colormark}`)
-    console.log("colormark///", colormark )
+    // console.log("colormark///", colormark )
+    console.log("filter//", colormark)
     const filterJson = await filter.json();
     setMarkers(filterJson.colorfilter)
     console.log("filterJSON/////", filterJson)
@@ -131,7 +135,7 @@ const getMarkerFromColor = async (colormark) => {
     }
 //////////////////////////////////////////////////////////////////////////////////////////.Map ajout poubelles///////////////////////////////////////////////
       let trashstart = markers.map((mark,i) => { 
-             console.log("marke.color/////", mark.color)
+            //  console.log("marke.color/////", mark.color)
     return <Marker key={i} title={mark.color} pinColor= {mark.color} onPress={()=>handleClicTrash(mark.latitude,mark.longitude,mark.color)} coordinate={{latitude: mark.latitude, longitude: mark.longitude}}/> 
     })
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,45 +167,37 @@ const getMarkerFromColor = async (colormark) => {
   <Overlay overlayStyle={styles.overlay} isVisible={overfilter} onBackdropPress={changestateover}>
     <Text style={{fontSize: 24}}>Que cherches tu ?</Text>
     <TouchableOpacity onPress={()=>getMarkerFromColor('yellow')}>
-      <Image source={require('./pin-jaune.png')}/>
+      <Image source={require('../assets/pin-jaune.png')}/>
     </TouchableOpacity>
       <Text style={styles.textover}>papier, pastique, carton</Text>
     <TouchableOpacity onPress={()=>getMarkerFromColor('orange')}>
-      <Image source={require('./pin-noir.png')}/>
+      <Image source={require('../assets/pin-noir.png')}/>
     </TouchableOpacity>
     <Text style={styles.textover}>tout venant</Text>
     <TouchableOpacity onPress={()=>getMarkerFromColor('green')}>
-      <Image source={require('./pin-vert.png')}/>
+      <Image source={require('../assets/pin-vert.png')}/>
     </TouchableOpacity>
     <Text style={styles.textover}>verre</Text>
     {/* <TouchableOpacity onPress={()=> image}>
       <Image source={require('./pin-vert.png')}/>
     </TouchableOpacity>
     <Text style={styles.textover}>verre</Text> */}
-
-
   </Overlay>
 {/* ////////////////////////////////////////////////////////////OVERLAY AJOUT POUBELLES///////////////////////////////////////////////////////////////// */}
   <Overlay isVisible={visible} overlayStyle={styles.overlay} onBackdropPress={toggleOverlay}>
         <Text style={styles.text}>Tu as trouver un nouveau bac ?</Text>
-    
         <TouchableOpacity onPress={() => trashmap('yellow')}>
-          <Image source={require('./pin-jaune.png')}/>
+          <Image source={require('../assets/pin-jaune.png')}/>
         </TouchableOpacity>
-
         <Text>Papier, plastique, carton</Text>
         <TouchableOpacity onPress={() => trashmap('orange')}>
-          <Image source={require('./pin-noir.png')}/>
+          <Image source={require('../assets/pin-noir.png')}/>
         </TouchableOpacity>
-
         <Text style={styles.textover}>Tout venant</Text>
         <TouchableOpacity onPress={() => trashmap('green')}>
-          <Image source={require('./pin-vert.png')}/>
+          <Image source={require('../assets/pin-vert.png')}/>
         </TouchableOpacity>
-
         <Text>Verre</Text>
-
-        <Button buttonStyle={styles.btnover} title="Valider"/>
   </Overlay>
   <Overlay overlayStyle={styles.overl} isVisible={visibleInfo} onBackdropPress={toggleInfo}>
             <Text style={styles.text}>
